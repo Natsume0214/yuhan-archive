@@ -1323,7 +1323,7 @@ export default function Home() {
         if (disposed) return;
         const parsed = new SVGLoader().parse(source);
         parsed.paths.forEach((path, index) => {
-          const shapes = path.toShapes(true);
+          const shapes = path.toShapes();
           const geometry = new THREE.ExtrudeGeometry(shapes, {
             depth: 28,
             bevelEnabled: true,
