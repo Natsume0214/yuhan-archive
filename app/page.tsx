@@ -354,7 +354,7 @@ function ScrollReveal({
   className?: string;
   enabled?: boolean;
 }) {
-  const { sectionRef, isVisible } = useScrollTriggeredReveal();
+  const { sectionRef, isVisible } = useScrollTriggeredReveal<HTMLDivElement>();
 
   return (
     <div
