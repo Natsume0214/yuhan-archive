@@ -1794,6 +1794,121 @@ body.loading-active { overflow: hidden; }
   transform: translate3d(-50%, 0, 0);
 }
 
+.project-two-details {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2048 / 1111;
+  overflow: hidden;
+  isolation: isolate;
+  background: #fbfbf9;
+}
+
+.project-two-details--mobile { display: none; }
+
+.project-two-details__background,
+.project-two-details__card,
+.project-two-details__title,
+.project-two-details__caption {
+  position: absolute;
+}
+
+.project-two-details__background {
+  z-index: 0;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}
+
+.project-two-details__card {
+  display: block;
+  margin: 0;
+  cursor: default;
+  transform-origin: center;
+  transition: transform .32s cubic-bezier(.2,.72,.18,1);
+}
+
+.project-two-details__card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+.project-two-details__card--1 {
+  z-index: 1;
+  top: 15.57%;
+  left: 9.18%;
+  width: 20.13%;
+}
+
+.project-two-details__card--2 {
+  z-index: 3;
+  top: 65.71%;
+  left: 11.62%;
+  width: 24.43%;
+}
+
+.project-two-details__card--3 {
+  z-index: 2;
+  top: 20.52%;
+  left: 28.17%;
+  width: 45.05%;
+}
+
+.project-two-details__card--4 {
+  z-index: 4;
+  top: 8.64%;
+  left: 66.95%;
+  width: 22.79%;
+}
+
+.project-two-details__card--5 {
+  z-index: 4;
+  top: 50.14%;
+  left: 72.46%;
+  width: 24.04%;
+}
+
+.project-two-details__title {
+  z-index: 3;
+  top: 76.96%;
+  left: 77.25%;
+  display: block;
+  width: 9.14%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+.project-two-details__caption {
+  z-index: 3;
+  top: 85.65%;
+  left: auto;
+  right: 13.61%;
+  margin: 0;
+  color: #645d50;
+  font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  font-size: clamp(10px, 1.27vw, 26px);
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: -.04em;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (hover: hover) and (pointer: fine) and (min-width: 701px) {
+  .project-two-details__card:hover {
+    z-index: 10;
+    transform: scale(1.03);
+  }
+}
+
 .project-two-hover-zone {
   position: absolute;
   z-index: 4;
@@ -2443,6 +2558,13 @@ body.loading-active { overflow: hidden; }
   transition: opacity .24s ease;
 }
 .wayfinding-fallback.is-hidden { opacity: 0; }
+.wayfinding-mobile-static {
+  display: none;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
 .sr-only {
   position: absolute;
   width: 1px;
@@ -2479,6 +2601,118 @@ body.loading-active { overflow: hidden; }
 }
 
 @media (max-width: 700px) {
+  /* Keep the mobile showcase inside the layout viewport. The desktop
+     compositions intentionally use full-bleed/sticky media, but their
+     intrinsic dimensions must not become the mobile page width. */
+  html,
+  body {
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  .showcase.is-open,
+  .showcase.is-open .showcase-stage,
+  .showcase.is-open .showcase-info,
+  .showcase.is-open .showcase-pavilion,
+  .showcase.is-open .showcase-project-two-panel,
+  .showcase.is-open .ainow-gallery,
+  .showcase.is-open .ainow-version-a-gallery,
+  .showcase.is-open .showcase-project-two-gallery {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .showcase.is-open {
+    overflow-x: clip;
+  }
+
+  .showcase.is-open img,
+  .showcase.is-open video {
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  /* This rail is intentionally wider than its desktop parent. On mobile it
+     must use the actual content width instead of viewport units plus a
+     negative margin, which can include the scrollbar gutter. */
+  .ainow-rows {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
+  }
+
+  /* The 16:9 case-study media should scale from its width on a phone. The
+     desktop full-height treatment otherwise enlarges the source beyond the
+     viewport and makes it look like the media is overflowing. */
+  .ainow-media-panel {
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  .ainow-media-panel > img,
+  .ainow-media-panel > video {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .showcase-film,
+  .showcase-version-b-cover,
+  .showcase-project-two-film,
+  .showcase-project-two-gallery > img,
+  .ainow-version-a-gallery img,
+  .wayfinding-fallback {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Match the later project galleries on mobile: the first cover is a
+     width-driven panel that starts at the top instead of a centered,
+     full-height stage. Desktop remains full viewport. */
+  .showcase.is-ainow .showcase-stage,
+  .showcase.is-project-two .showcase-stage {
+    min-height: 0;
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  .showcase.is-project-two .showcase-stage {
+    aspect-ratio: 1440 / 820;
+  }
+
+  /* Keep the complete cover visible inside the width-driven mobile stage. */
+  .showcase.is-ainow .showcase-film,
+  .showcase.is-ainow .showcase-version-b-cover,
+  .showcase.is-project-two .showcase-project-two-film {
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .project-two-details--desktop { display: none; }
+  .project-two-details--mobile {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: auto;
+    margin: 0;
+    overflow: visible;
+    background: transparent;
+  }
+  .project-two-details--mobile img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Keep the last Other works caption clear of the first right-side image. */
+  .other-works-item--six figcaption {
+    top: 9.5%;
+  }
+
   .project-header {
     display: flex;
     min-height: 390px;
@@ -2497,12 +2731,21 @@ body.loading-active { overflow: hidden; }
     width: auto;
   }
   .project-header__logo {
-    max-width: 70%;
-    margin-bottom: auto;
+    width: min(50vw, 180px);
+    max-width: 50%;
+    /* 15px flex gap + 7px logo margin = AI NOW's 22px logo/title gap. */
+    margin-bottom: 7px;
   }
   .project-header--hoo .project-header__logo,
   .project-header--muning .project-header__logo {
-    width: auto;
+    width: min(50vw, 180px);
+    max-width: 50%;
+  }
+  .muning-logo-phone-copy,
+  .muning-avatar-copy,
+  .muning-type-primary-copy,
+  .muning-type-display-copy {
+    font-size: 8px;
   }
   .project-header__title {
     font-size: 22px;
@@ -2513,9 +2756,21 @@ body.loading-active { overflow: hidden; }
     line-height: 1.35;
   }
   .project-header__description {
-    font-size: 14px;
+    font-size: 13px;
     line-height: 1.55;
     white-space: normal;
+  }
+  .hoo-audience-conclusion,
+  .hoo-logo-summary,
+  .hoo-icon-copy,
+  .hoo-type-description {
+    font-size: 8px;
+    white-space: normal;
+  }
+  .hoo-logo-summary {
+    left: 6.95%;
+    right: 6%;
+    width: auto;
   }
   .project-header__meta {
     display: grid;
@@ -2550,8 +2805,15 @@ body.loading-active { overflow: hidden; }
   }
   .ainow-ruler-tick { height: 12px; }
   .wayfinding-scene {
-    min-height: 78svh;
-    aspect-ratio: auto;
+    min-height: 0;
+    aspect-ratio: 2048 / 1152;
+  }
+  .wayfinding-canvas,
+  .wayfinding-fallback {
+    display: none;
+  }
+  .wayfinding-mobile-static {
+    display: block;
   }
 }
 

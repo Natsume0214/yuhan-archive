@@ -354,7 +354,7 @@ function ScrollReveal({
   className?: string;
   enabled?: boolean;
 }) {
-  const { sectionRef, isVisible } = useScrollTriggeredReveal<HTMLDivElement>();
+  const { sectionRef, isVisible } = useScrollTriggeredReveal();
 
   return (
     <div
@@ -608,14 +608,12 @@ function MuningPanel({ number }: { number: number }) {
           <MuningRevealImage src="/showcase/muning/about.png" alt="About" className="muning-about-title" />
           <MuningRevealText className="muning-about-copy">
             Muning Ring是一款主要面向家庭健康的AI智能戒指，<br />
-            让家人能够更安心地了解彼此的日常<br />
-            状态与健康变化
+            让家人能够更安心地了解彼此的日常状态与健康变化
           </MuningRevealText>
           <MuningRevealImage src="/showcase/muning/concept.png" alt="Concept" className="muning-concept-title" />
           <MuningRevealText className="muning-concept-copy">
             打造一款温暖、清晰且易于使用的健康陪伴 App，集<br />
-            中查看家庭成员的活动、睡眠与关键健康数据，并在<br />
-            异常发生时及时获得提醒、沟通与照护支持
+            中查看家庭成员的活动、睡眠与关键健康数据，并在异常发生时及时获得提醒、沟通与照护支持
           </MuningRevealText>
         </>
       ) : null}
@@ -922,6 +920,82 @@ function ProjectTwoInterfaceMap() {
         <p className="project-two-hover-card">动态胶片墙<br />每个胶片都是一个故事窗口</p>
       </article>
     </section>
+  );
+}
+
+function ProjectTwoDetails() {
+  return (
+    <>
+      <section className="project-two-details project-two-details--desktop" aria-label="即梦片场视觉细节">
+        <img
+          className="project-two-details__background"
+          src="/showcase/project-two-details/background.png"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+        />
+
+        <div className="project-two-details__card project-two-details__card--1">
+          <img
+            src="/showcase/project-two-details/card-1.png"
+            alt="清刻本悦宋特殊字体卡片"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div className="project-two-details__card project-two-details__card--2">
+          <img
+            src="/showcase/project-two-details/card-2.png"
+            alt="即梦片场已点亮数据卡片"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div className="project-two-details__card project-two-details__card--3">
+          <img
+            src="/showcase/project-two-details/card-3.png"
+            alt="即梦片场平板网站展示卡片"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div className="project-two-details__card project-two-details__card--4">
+          <img
+            src="/showcase/project-two-details/card-4.png"
+            alt="即梦片场 Logo 卡片"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div className="project-two-details__card project-two-details__card--5">
+          <img
+            src="/showcase/project-two-details/card-5.png"
+            alt="即梦片场图标卡片"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+
+        <img
+          className="project-two-details__title"
+          src="/showcase/project-two-details/title.png"
+          alt="Details"
+          loading="lazy"
+          decoding="async"
+        />
+        <p className="project-two-details__caption">字体选择、按钮光效、Logo设计都在与「影院梦感」呼应</p>
+      </section>
+
+      <figure className="project-two-details project-two-details--mobile">
+        <img
+          src="/showcase/project-two-details/mobile-reference.png"
+          alt="即梦片场项目视觉细节展示"
+          loading="lazy"
+          decoding="async"
+        />
+      </figure>
+    </>
   );
 }
 
@@ -1323,7 +1397,7 @@ export default function Home() {
         if (disposed) return;
         const parsed = new SVGLoader().parse(source);
         parsed.paths.forEach((path, index) => {
-          const shapes = path.toShapes();
+          const shapes = path.toShapes(true);
           const geometry = new THREE.ExtrudeGeometry(shapes, {
             depth: 28,
             bevelEnabled: true,
@@ -2113,6 +2187,7 @@ export default function Home() {
               <ProjectTwoStory />
               <ProjectTwoExploration />
               <ProjectTwoInterfaceMap />
+              <ProjectTwoDetails />
             </section>
           ) : null}
 

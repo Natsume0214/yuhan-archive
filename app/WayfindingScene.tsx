@@ -100,12 +100,14 @@ const applySignAssemblyAngle = (target: SignAssemblyTarget, angle: number) => {
   bar.scale.set(1, length, 1);
 };
 
-export default function WayfindingScene() {
+function WayfindingDesktopScene() {
   const hostRef = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
+    if (window.matchMedia("(max-width: 700px)").matches) return;
+
     const host = hostRef.current;
     if (!host) return;
 
@@ -480,7 +482,7 @@ export default function WayfindingScene() {
   }, []);
 
   return (
-    <section className="wayfinding-scene" aria-label="左右两套路标装置可分别水平旋转的 AI NOW 三维路标">
+    <>
       <img
         className={`wayfinding-fallback${ready && !failed ? " is-hidden" : ""}`}
         src="/showcase/ainow/version-a/04-373.png"
@@ -488,6 +490,29 @@ export default function WayfindingScene() {
       />
       <div ref={hostRef} className="wayfinding-canvas" />
       <span className="sr-only">水平拖动任一路牌可旋转所属柱体装置。</span>
+    </>
+  );
+}
+
+export default function WayfindingScene() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 700px)");
+    const update = () => setIsMobile(mediaQuery.matches);
+    update();
+    mediaQuery.addEventListener("change", update);
+    return () => mediaQuery.removeEventListener("change", update);
+  }, []);
+
+  return (
+    <section className="wayfinding-scene" aria-label="AI NOW 路标装置">
+      <img
+        className="wayfinding-mobile-static"
+        src="/showcase/ainow/version-a/wayfinding-mobile.png"
+        alt="AI NOW 路标装置静态图"
+      />
+      {!isMobile ? <WayfindingDesktopScene /> : null}
     </section>
   );
 }
