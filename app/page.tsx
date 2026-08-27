@@ -1055,6 +1055,7 @@ export default function Home() {
   const showcaseProjectVideoRef = useRef<HTMLVideoElement>(null);
   const resumeWebglRef = useRef<(() => void) | null>(null);
   const cubeProjectSelectRef = useRef<((index: number) => void) | null>(null);
+  const cubeDebugRef = useRef<((label: string, extra?: Record<string, unknown>) => void) | null>(null);
   const introBurstStartedAt = useRef<number | null>(null);
   const activeConceptRef = useRef(2);
   const conceptHoverTimer = useRef<number | null>(null);
@@ -1069,14 +1070,32 @@ export default function Home() {
   const conceptLockPosition = useRef({ x: 0, y: 0 });
   const pageScrollBeforeShowcase = useRef(0);
   const openShowcase = useCallback((project: ShowcaseProject = "ainow-a") => {
+    cubeDebugRef.current?.("showcase-open-request", {
+      project,
+      scrollY: window.scrollY,
+    });
     pageScrollBeforeShowcase.current = window.scrollY;
     setShowcaseProject(project);
     setShowcaseOpen(true);
   }, []);
   const closeShowcase = useCallback(() => {
+    cubeDebugRef.current?.("showcase-close-request", {
+      currentScrollY: window.scrollY,
+      targetScrollY: pageScrollBeforeShowcase.current,
+    });
     setShowcaseOpen(false);
     window.requestAnimationFrame(() => {
-      window.scrollTo({ top: pageScrollBeforeShowcase.current, behavior: "auto" });
+      const targetScrollY = pageScrollBeforeShowcase.current;
+      window.scrollTo({ top: targetScrollY, behavior: "auto" });
+      cubeDebugRef.current?.("showcase-scroll-restored", {
+        targetScrollY,
+        actualScrollY: window.scrollY,
+      });
+      window.requestAnimationFrame(() => {
+        cubeDebugRef.current?.("showcase-close-next-frame", {
+          actualScrollY: window.scrollY,
+        });
+      });
     });
   }, []);
   const isAinowProject = showcaseProject === "ainow-a" || showcaseProject === "ainow-b";
@@ -1095,6 +1114,11 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    cubeDebugRef.current?.(showcaseOpen ? "showcase-open-state" : "showcase-close-state", {
+      stateShowcaseOpen: showcaseOpen,
+      scrollY: window.scrollY,
+      showcaseHeight: showcaseRef.current?.offsetHeight ?? 0,
+    });
     if (showcaseOpen) window.scrollTo({ top: 0, behavior: "auto" });
   }, [showcaseOpen]);
 
@@ -1365,11 +1389,82 @@ export default function Home() {
 
     let baseCameraZ = 0;
     let maxCubeScale = 1;
+    const cubeDebugStorageKey = "__gathering_letters_cube_debug__";
+    const finiteOrValue = (value: number) => Number.isFinite(value) ? value : String(value);
+    const recordCubeDebug = (label: string, extra: Record<string, unknown> = {}) => {
+      const canvas = renderer.domElement;
+      const cssRect = canvas.getBoundingClientRect();
+      const rendererSize = new THREE.Vector2();
+      const drawingBufferSize = new THREE.Vector2();
+      let rendererContextLost: boolean | string = "unavailable";
+      let webglContextAttributes: WebGLContextAttributes | null = null;
+      let maxTextureSize: number | string = "unavailable";
+      try {
+        const context = renderer.getContext();
+        renderer.getSize(rendererSize);
+        renderer.getDrawingBufferSize(drawingBufferSize);
+        rendererContextLost = context.isContextLost();
+        webglContextAttributes = context.getContextAttributes();
+        if (!rendererContextLost) maxTextureSize = context.getParameter(context.MAX_TEXTURE_SIZE);
+      } catch (error) {
+        rendererContextLost = error instanceof Error ? error.message : String(error);
+      }
+
+      const entry = {
+        timestamp: new Date().toISOString(),
+        label,
+        showcaseOpen: showcaseOpenRef.current,
+        scrollY: window.scrollY,
+        windowInnerWidth: window.innerWidth,
+        windowInnerHeight: window.innerHeight,
+        devicePixelRatio: window.devicePixelRatio,
+        documentVisibility: document.visibilityState,
+        visualViewportWidth: window.visualViewport?.width ?? null,
+        visualViewportHeight: window.visualViewport?.height ?? null,
+        sectionDisplay: getComputedStyle(section).display,
+        sectionClassName: section.className,
+        showcaseClassName: showcaseRef.current?.className ?? null,
+        sectionOffsetHeight: section.offsetHeight,
+        hostClientWidth: host.clientWidth,
+        hostClientHeight: host.clientHeight,
+        canvasConnected: canvas.isConnected,
+        canvasCssWidth: cssRect.width,
+        canvasCssHeight: cssRect.height,
+        canvasWidth: canvas.width,
+        canvasHeight: canvas.height,
+        rendererWidth: rendererSize.x,
+        rendererHeight: rendererSize.y,
+        drawingBufferWidth: drawingBufferSize.x,
+        drawingBufferHeight: drawingBufferSize.y,
+        pixelRatio: renderer.getPixelRatio(),
+        rendererContextLost,
+        webglContextAttributes,
+        maxTextureSize,
+        cubeVisible: cube.visible,
+        cubeScaleX: finiteOrValue(cube.scale.x),
+        cubeScaleY: finiteOrValue(cube.scale.y),
+        cubeScaleZ: finiteOrValue(cube.scale.z),
+        maxCubeScale: finiteOrValue(maxCubeScale),
+        ...extra,
+      };
+
+      console.log("[cube-debug]", entry);
+      try {
+        const stored = JSON.parse(sessionStorage.getItem(cubeDebugStorageKey) ?? "[]");
+        const history = Array.isArray(stored) ? stored : [];
+        history.push(entry);
+        sessionStorage.setItem(cubeDebugStorageKey, JSON.stringify(history.slice(-120)));
+      } catch {
+        // Diagnostic persistence is best-effort and must never affect the site.
+      }
+    };
+    cubeDebugRef.current = recordCubeDebug;
 
     const resize = () => {
       const width = host.clientWidth;
       const height = host.clientHeight;
       const aspect = width / height;
+      recordCubeDebug("resize-before", { resizeWidth: width, resizeHeight: height, aspect: finiteOrValue(aspect) });
       const compositionAspect = VIEWBOX.width / VIEWBOX.height;
       const visibleHeight = aspect > compositionAspect ? VIEWBOX.width / aspect : VIEWBOX.height;
       const visibleWidth = visibleHeight * aspect;
@@ -1387,9 +1482,23 @@ export default function Home() {
       camera.position.z = baseCameraZ;
       camera.updateProjectionMatrix();
       renderer.setSize(width, height, false);
+      recordCubeDebug("resize-after", {
+        resizeWidth: width,
+        resizeHeight: height,
+        aspect: finiteOrValue(aspect),
+        visibleWidth: finiteOrValue(visibleWidth),
+        visibleHeight: finiteOrValue(visibleHeight),
+        baseCameraZ: finiteOrValue(baseCameraZ),
+      });
     };
 
     const render = () => renderer.render(scene, camera);
+    const handleWebglContextLost = () => {
+      recordCubeDebug("webgl-context-lost");
+    };
+    const handleWebglContextRestored = () => {
+      recordCubeDebug("webgl-context-restored");
+    };
 
     fetch("/letters/composition.svg")
       .then((response) => response.text())
@@ -1448,6 +1557,8 @@ export default function Home() {
     let lastScrollAt = 0;
     let cubeInteractionEnabled = false;
     let directoryIsVisible = false;
+    let debugShowcaseOpen = showcaseOpenRef.current;
+    let lastScrollDebugAt = Number.NEGATIVE_INFINITY;
     let reportedCubeFaceIndex = 0;
     const cubeContentHoverValues = new Map<THREE.MeshBasicMaterial, number>();
     const cubeContentHoverFrom = new Map<THREE.MeshBasicMaterial, number>();
@@ -1497,6 +1608,12 @@ export default function Home() {
       directoryIsVisible = visible;
       pointerNeedsUpdate = true;
       setCubeDirectoryVisible(visible);
+      recordCubeDebug("directory-visibility-change", {
+        visible,
+        cubeTarget: finiteOrValue(cubeTarget),
+        renderedProgress: finiteOrValue(renderedProgress),
+        cubeInteractionEnabled,
+      });
     };
 
     const restoreDynamicCubeMaterials = () => {
@@ -1602,6 +1719,26 @@ export default function Home() {
         ? directoryProgress >= CUBE_DIRECTORY_HIDE_PROGRESS
         : directoryProgress >= CUBE_DIRECTORY_VISIBLE_PROGRESS;
       lastScrollAt = performance.now();
+      if (
+        lastScrollAt - lastScrollDebugAt >= 500
+        || !Number.isFinite(raw)
+        || !Number.isFinite(cubeTarget)
+        || section.offsetHeight === 0
+      ) {
+        lastScrollDebugAt = lastScrollAt;
+        recordCubeDebug("scroll-sync", {
+          sectionTop: bounds.top,
+          sectionHeight: section.offsetHeight,
+          scrollDistance: distance,
+          raw,
+          scrollProgress,
+          cubeTarget,
+          directoryProgress,
+          renderedProgress,
+          directoryIsVisible,
+          cubeInteractionEnabled,
+        });
+      }
     };
 
     const handleCubeWheel = (event: WheelEvent) => {
@@ -1661,7 +1798,18 @@ export default function Home() {
 
     function draw(now: number) {
       animationFrame = 0;
-      if (showcaseOpenRef.current || document.visibilityState !== "visible") return;
+      const showcaseOpenNow = showcaseOpenRef.current;
+      if (debugShowcaseOpen !== showcaseOpenNow) {
+        debugShowcaseOpen = showcaseOpenNow;
+        recordCubeDebug(showcaseOpenNow ? "draw-after-open" : "draw-after-close", {
+          scrollProgress,
+          cubeTarget,
+          renderedProgress,
+          directoryIsVisible,
+          cubeInteractionEnabled,
+        });
+      }
+      if (showcaseOpenNow || document.visibilityState !== "visible") return;
       const delta = previousFrameAt ? Math.min(0.05, Math.max(0.001, (now - previousFrameAt) / 1000)) : 0.016;
       previousFrameAt = now;
       progressVelocity += (scrollProgress - renderedProgress) * 108 * delta;
@@ -1894,6 +2042,8 @@ export default function Home() {
     section.addEventListener("pointermove", updatePointer);
     section.addEventListener("pointerleave", clearPointer);
     section.addEventListener("pointerup", handleCubeActivate);
+    renderer.domElement.addEventListener("webglcontextlost", handleWebglContextLost);
+    renderer.domElement.addEventListener("webglcontextrestored", handleWebglContextRestored);
 
     return () => {
       disposed = true;
@@ -1904,8 +2054,11 @@ export default function Home() {
       section.removeEventListener("pointermove", updatePointer);
       section.removeEventListener("pointerleave", clearPointer);
       section.removeEventListener("pointerup", handleCubeActivate);
+      renderer.domElement.removeEventListener("webglcontextlost", handleWebglContextLost);
+      renderer.domElement.removeEventListener("webglcontextrestored", handleWebglContextRestored);
       section.style.cursor = "";
       if (cubeProjectSelectRef.current === selectCubeProject) cubeProjectSelectRef.current = null;
+      if (cubeDebugRef.current === recordCubeDebug) cubeDebugRef.current = null;
       window.cancelAnimationFrame(animationFrame);
       faceMaterial.dispose();
       edgeMaterial.dispose();
