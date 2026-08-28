@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { getOptimizedMediaPath, ResponsiveImage } from "./ResponsiveMedia";
 
 type PoleKey = "left" | "right";
 
@@ -114,6 +115,7 @@ function WayfindingDesktopScene() {
     let disposed = false;
     let frame = 0;
     let visible = true;
+    const mediaVariant = window.matchMedia("(max-width: 700px)").matches ? "mobile" : "desktop";
     const disposables: Array<{ dispose: () => void }> = [];
     const textureLoader = new THREE.TextureLoader();
     const scene = new THREE.Scene();
@@ -245,9 +247,9 @@ function WayfindingDesktopScene() {
         const base = `/showcase/ainow/version-a/signs/sign-${spec.id}`;
         const customBase = spec.frontAsset?.replace(/\.svg$/, "");
         const [frontTexture, maskTexture, frameTexture] = await Promise.all([
-          textureLoader.loadAsync(spec.frontAsset ?? `${base}.png`),
-          textureLoader.loadAsync(customBase ? `${customBase}-mask.svg` : `${base}-mask.png`),
-          textureLoader.loadAsync(customBase ? `${customBase}-frame.svg` : `${base}-frame.png`),
+          textureLoader.loadAsync(spec.frontAsset ?? getOptimizedMediaPath(`${base}.png`, mediaVariant)),
+          textureLoader.loadAsync(customBase ? `${customBase}-mask.svg` : getOptimizedMediaPath(`${base}-mask.png`, mediaVariant)),
+          textureLoader.loadAsync(customBase ? `${customBase}-frame.svg` : getOptimizedMediaPath(`${base}-frame.png`, mediaVariant)),
         ]);
         if (disposed) {
           frontTexture.dispose();
@@ -483,7 +485,7 @@ function WayfindingDesktopScene() {
 
   return (
     <>
-      <img
+      <ResponsiveImage
         className={`wayfinding-fallback${ready && !failed ? " is-hidden" : ""}`}
         src="/showcase/ainow/version-a/04-373.png"
         alt="AI NOW 路标装置"
@@ -507,7 +509,7 @@ export default function WayfindingScene() {
 
   return (
     <section className="wayfinding-scene" aria-label="AI NOW 路标装置">
-      <img
+      <ResponsiveImage
         className="wayfinding-mobile-static"
         src="/showcase/ainow/version-a/wayfinding-mobile.png"
         alt="AI NOW 路标装置静态图"

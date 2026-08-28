@@ -6,6 +6,7 @@ import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
 import LoadingIntro from "./LoadingIntro";
 import WayfindingScene from "./WayfindingScene";
+import { getOptimizedMediaPath, ResponsiveImage, ResponsiveVideo } from "./ResponsiveMedia";
 
 const VIEWBOX = { width: 5442.52, height: 3061.42 };
 const LETTER_SEQUENCE_PORTION = 0.8;
@@ -148,7 +149,7 @@ function OtherWorksItem({
 
   return (
     <figure ref={sectionRef} className={`other-works-item ${work.className}`}>
-      <img
+      <ResponsiveImage
         src={work.image}
         alt={`${work.category}：${work.title}`}
         loading={index === 0 ? "eager" : "lazy"}
@@ -187,10 +188,10 @@ function ProjectHeader({ project }: { project: ProjectHeaderProject }) {
   return (
     <section className={`project-header project-header--${project}`} aria-label={ariaLabel}>
       {project === "hoo" ? (
-        <img className="project-header__logo" src="/showcase/hoo/header-logo.png" alt="Hōo" />
+        <ResponsiveImage className="project-header__logo" src="/showcase/hoo/header-logo.png" alt="Hōo" />
       ) : null}
       {project === "muning" ? (
-        <img className="project-header__logo" src="/showcase/muning/header-logo.png" alt="Muning" />
+        <ResponsiveImage className="project-header__logo" src="/showcase/muning/header-logo.png" alt="Muning" />
       ) : null}
 
       <h2 className="project-header__title">
@@ -248,7 +249,7 @@ function HooPanel({ image, number }: { image: string; number: number }) {
 
   return (
     <figure ref={sectionRef} className={`hoo-panel hoo-panel--${number}`}>
-      <img
+      <ResponsiveImage
         src={image}
         alt={`Hōo 品牌设计展示 ${number}`}
         loading={number === 1 ? "eager" : "lazy"}
@@ -371,7 +372,7 @@ function HolidayKvPanel({ image, number }: { image: string; number: number }) {
 
   return (
     <figure ref={sectionRef} className={`holiday-kv-panel holiday-kv-panel--${number}`}>
-      <img
+      <ResponsiveImage
         src={image}
         alt={`Holiday KV 项目展示 ${number}`}
         loading={number === 1 ? "eager" : "lazy"}
@@ -465,7 +466,7 @@ function MuningRevealImage({
   const { sectionRef, isVisible } = useScrollTriggeredReveal<HTMLImageElement>();
 
   return (
-    <img
+    <ResponsiveImage
       ref={animated ? sectionRef : undefined}
       className={animated ? getRevealClassName(isVisible, className) : className}
       style={animated ? getRevealStyle(delay) : undefined}
@@ -550,7 +551,7 @@ function MuningPhoneReveal({
 
   return (
     <div ref={sectionRef} className={`muning-phone-reveal ${className} ${isVisible ? "is-visible" : ""}`.trim()}>
-      <img src={src} alt={alt} style={{ transitionDelay: `${delay}ms` }} loading="lazy" decoding="async" />
+      <ResponsiveImage src={src} alt={alt} style={{ transitionDelay: `${delay}ms` }} loading="lazy" decoding="async" />
     </div>
   );
 }
@@ -569,7 +570,7 @@ function MuningPanel({ number }: { number: number }) {
   if (number === 4) {
     return (
       <figure className="muning-panel muning-panel--4 muning-logo-phone-panel">
-        <img
+        <ResponsiveImage
           className="muning-panel-base"
           src={image}
           alt="Muning Ring logo and app mockup background"
@@ -593,7 +594,7 @@ function MuningPanel({ number }: { number: number }) {
 
   return (
     <figure className={`muning-panel muning-panel--${number}`}>
-      <img
+      <ResponsiveImage
         className="muning-panel-base"
         src={image}
         alt={`Muning Ring project visual ${number}`}
@@ -768,14 +769,14 @@ function ProjectTwoStory() {
   return (
     <section ref={storyRef} className="showcase-project-two-story" aria-label="Project 2 story">
       <div className="showcase-project-two-story-canvas">
-        <img
+        <ResponsiveImage
           className="showcase-project-two-story-background"
           src="/showcase/project-two-02.png"
           alt=""
           aria-hidden="true"
         />
 
-        <img
+        <ResponsiveImage
           className={getRevealClassName(isVisible, "project-two-story-layer project-two-question-title")}
           src="/showcase/project-two-question.png"
           alt="Question"
@@ -785,7 +786,7 @@ function ProjectTwoStory() {
           AI创作者需要的是什么样的平台？
         </p>
 
-        <img
+        <ResponsiveImage
           className="project-two-story-layer project-two-bubbles"
           src="/showcase/project-two-bubbles.png"
           alt=""
@@ -802,7 +803,7 @@ function ProjectTwoStory() {
           ))}
         </div>
 
-        <img
+        <ResponsiveImage
           className={getRevealClassName(isVisible, "project-two-story-layer project-two-solution-title")}
           src="/showcase/project-two-solution.png"
           alt="Solution"
@@ -812,7 +813,7 @@ function ProjectTwoStory() {
           如何满足创作者的核心诉求？
         </p>
 
-        <img
+        <ResponsiveImage
           className={getRevealClassName(isVisible, "project-two-story-layer project-two-solutions")}
           src="/showcase/project-two-solutions.png"
           alt="三个创作者平台方向展示"
@@ -838,7 +839,7 @@ function ProjectTwoExploration() {
 
   return (
     <section ref={sectionRef} className="project-two-exploration" aria-labelledby="project-two-exploration-title">
-      <img
+      <ResponsiveImage
         className="project-two-exploration-background"
         src="/showcase/project-two-03.png"
         alt="日梦片场从露天观影会、电影院到巨幕荧屏的设计探索"
@@ -848,7 +849,7 @@ function ProjectTwoExploration() {
       <h2 id="project-two-exploration-title">设计探索</h2>
 
       <article className="project-two-exploration-note is-open-air">
-        <img className={getRevealClassName(isVisible)} style={getRevealStyle(100)} src="/showcase/exploration-1.png" alt="" aria-hidden="true" />
+        <ResponsiveImage className={getRevealClassName(isVisible)} style={getRevealStyle(100)} src="/showcase/exploration-1.png" alt="" aria-hidden="true" />
         <div className={getRevealClassName(isVisible)} style={getRevealStyle(180)}>
           <h3>露天观影会</h3>
           <p>意象新颖、交互有趣<br />但花苞场景通用性弱</p>
@@ -856,7 +857,7 @@ function ProjectTwoExploration() {
       </article>
 
       <article className="project-two-exploration-note is-cinema">
-        <img className={getRevealClassName(isVisible)} style={getRevealStyle(260)} src="/showcase/exploration-2.png" alt="" aria-hidden="true" />
+        <ResponsiveImage className={getRevealClassName(isVisible)} style={getRevealStyle(260)} src="/showcase/exploration-2.png" alt="" aria-hidden="true" />
         <div className={getRevealClassName(isVisible)} style={getRevealStyle(340)}>
           <h3>电影院</h3>
           <p>有观影氛围<br />但太传统、不够新</p>
@@ -864,7 +865,7 @@ function ProjectTwoExploration() {
       </article>
 
       <article className="project-two-exploration-note is-screen">
-        <img className={getRevealClassName(isVisible)} style={getRevealStyle(420)} src="/showcase/exploration-3.png" alt="" aria-hidden="true" />
+        <ResponsiveImage className={getRevealClassName(isVisible)} style={getRevealStyle(420)} src="/showcase/exploration-3.png" alt="" aria-hidden="true" />
         <div className={getRevealClassName(isVisible)} style={getRevealStyle(500)}>
           <h3>巨幕荧屏</h3>
           <p>沉浸感强<br />基于此继续延伸</p>
@@ -879,7 +880,7 @@ function ProjectTwoInterfaceMap() {
 
   return (
     <section ref={sectionRef} className="project-two-interface-map" aria-label="日梦片场首页、个人页与详情页设计">
-      <img
+      <ResponsiveImage
         className="project-two-interface-map-background"
         src="/showcase/project-two-04.png"
         alt="日梦片场项目移动端与网页端展示"
@@ -888,17 +889,17 @@ function ProjectTwoInterfaceMap() {
       />
 
       <article className="project-two-interface-note is-homepage">
-        <img className={getRevealClassName(isVisible)} style={getRevealStyle(0)} src="/showcase/project-two-homepage.png" alt="Homepage" />
+        <ResponsiveImage className={getRevealClassName(isVisible)} style={getRevealStyle(0)} src="/showcase/project-two-homepage.png" alt="Homepage" />
         <p className={getRevealClassName(isVisible)} style={getRevealStyle(80)}>线下的影院是集体造梦的场所<br />线上的平台是创作者深度共鸣的空间，首页设计融合两者特点</p>
       </article>
 
       <article className="project-two-interface-note is-profile">
-        <img className={getRevealClassName(isVisible)} style={getRevealStyle(160)} src="/showcase/project-two-profile.png" alt="Profile" />
+        <ResponsiveImage className={getRevealClassName(isVisible)} style={getRevealStyle(160)} src="/showcase/project-two-profile.png" alt="Profile" />
         <p className={getRevealClassName(isVisible)} style={getRevealStyle(240)}>个人页</p>
       </article>
 
       <article className="project-two-interface-note is-detail-page">
-        <img className={getRevealClassName(isVisible)} style={getRevealStyle(320)} src="/showcase/project-two-detail-page.png" alt="Detail page" />
+        <ResponsiveImage className={getRevealClassName(isVisible)} style={getRevealStyle(320)} src="/showcase/project-two-detail-page.png" alt="Detail page" />
         <p className={getRevealClassName(isVisible)} style={getRevealStyle(400)}>详情页</p>
       </article>
 
@@ -927,7 +928,7 @@ function ProjectTwoDetails() {
   return (
     <>
       <section className="project-two-details project-two-details--desktop" aria-label="即梦片场视觉细节">
-        <img
+        <ResponsiveImage
           className="project-two-details__background"
           src="/showcase/project-two-details/background.png"
           alt=""
@@ -937,7 +938,7 @@ function ProjectTwoDetails() {
         />
 
         <div className="project-two-details__card project-two-details__card--1">
-          <img
+          <ResponsiveImage
             src="/showcase/project-two-details/card-1.png"
             alt="清刻本悦宋特殊字体卡片"
             loading="lazy"
@@ -945,7 +946,7 @@ function ProjectTwoDetails() {
           />
         </div>
         <div className="project-two-details__card project-two-details__card--2">
-          <img
+          <ResponsiveImage
             src="/showcase/project-two-details/card-2.png"
             alt="即梦片场已点亮数据卡片"
             loading="lazy"
@@ -953,7 +954,7 @@ function ProjectTwoDetails() {
           />
         </div>
         <div className="project-two-details__card project-two-details__card--3">
-          <img
+          <ResponsiveImage
             src="/showcase/project-two-details/card-3.png"
             alt="即梦片场平板网站展示卡片"
             loading="lazy"
@@ -961,7 +962,7 @@ function ProjectTwoDetails() {
           />
         </div>
         <div className="project-two-details__card project-two-details__card--4">
-          <img
+          <ResponsiveImage
             src="/showcase/project-two-details/card-4.png"
             alt="即梦片场 Logo 卡片"
             loading="lazy"
@@ -969,7 +970,7 @@ function ProjectTwoDetails() {
           />
         </div>
         <div className="project-two-details__card project-two-details__card--5">
-          <img
+          <ResponsiveImage
             src="/showcase/project-two-details/card-5.png"
             alt="即梦片场图标卡片"
             loading="lazy"
@@ -977,7 +978,7 @@ function ProjectTwoDetails() {
           />
         </div>
 
-        <img
+        <ResponsiveImage
           className="project-two-details__title"
           src="/showcase/project-two-details/title.png"
           alt="Details"
@@ -988,7 +989,7 @@ function ProjectTwoDetails() {
       </section>
 
       <figure className="project-two-details project-two-details--mobile">
-        <img
+        <ResponsiveImage
           src="/showcase/project-two-details/mobile-reference.png"
           alt="即梦片场项目视觉细节展示"
           loading="lazy"
@@ -1245,6 +1246,7 @@ export default function Home() {
     const CUBE_TEXTURE_HEIGHT_RATIO = CUBE_FACE_HEIGHT / CUBE_FACE_WIDTH;
     const CUBE_CONTENT_HOVER_SCALE = 1.03;
     const CUBE_CONTENT_HOVER_DURATION_MS = 200;
+    const mediaVariant = window.matchMedia("(max-width: 700px)").matches ? "mobile" : "desktop";
     const fitSquareTextureToWideFace = (texture: THREE.Texture) => {
       texture.repeat.set(1, CUBE_TEXTURE_HEIGHT_RATIO);
       texture.offset.set(0, (1 - CUBE_TEXTURE_HEIGHT_RATIO) / 2);
@@ -1252,7 +1254,7 @@ export default function Home() {
     };
     const createCubeVideo = (source: string) => {
       const video = document.createElement("video");
-      video.src = source;
+      video.src = getOptimizedMediaPath(source, mediaVariant);
       video.muted = true;
       video.loop = true;
       video.playsInline = true;
@@ -1295,22 +1297,22 @@ export default function Home() {
     // Projects 3 and 7 enter through the back face, whose UVs are upside down
     // from the front-facing presentation.
     rotateCubeTexture(secondCubeVideo.texture, true);
-    const firstFacePosterTexture = new THREE.TextureLoader().load("/cube/face-1-poster.webp");
+    const firstFacePosterTexture = new THREE.TextureLoader().load(getOptimizedMediaPath("/cube/face-1-poster.webp", mediaVariant));
     firstFacePosterTexture.colorSpace = THREE.SRGBColorSpace;
     fitSquareTextureToWideFace(firstFacePosterTexture);
     // The cube only needs a 2x display-resolution copy; the full-resolution PNG
     // remains the Version B project cover in the showcase.
-    const versionBCoverTexture = new THREE.TextureLoader().load("/showcase/ainow/version-b-cover-cube.webp");
+    const versionBCoverTexture = new THREE.TextureLoader().load(getOptimizedMediaPath("/showcase/ainow/version-b-cover-cube.webp", mediaVariant));
     versionBCoverTexture.colorSpace = THREE.SRGBColorSpace;
     // Projects after the two AI NOW entries use wide 16:9 cover art, so keep the full texture instead
     // of applying the square-cover crop used by the first two cube faces.
-    const thirdFaceTexture = new THREE.TextureLoader().load("/cube/face-3-cube.webp");
+    const thirdFaceTexture = new THREE.TextureLoader().load(getOptimizedMediaPath("/cube/face-3-cube.webp", mediaVariant));
     thirdFaceTexture.colorSpace = THREE.SRGBColorSpace;
-    const fourthFaceTexture = new THREE.TextureLoader().load("/cube/face-4-cube.webp");
+    const fourthFaceTexture = new THREE.TextureLoader().load(getOptimizedMediaPath("/cube/face-4-cube.webp", mediaVariant));
     fourthFaceTexture.colorSpace = THREE.SRGBColorSpace;
-    const fifthFaceTexture = new THREE.TextureLoader().load("/cube/face-5-cube.webp");
+    const fifthFaceTexture = new THREE.TextureLoader().load(getOptimizedMediaPath("/cube/face-5-cube.webp", mediaVariant));
     fifthFaceTexture.colorSpace = THREE.SRGBColorSpace;
-    const sixthFaceTexture = new THREE.TextureLoader().load("/cube/face-6-cube.webp");
+    const sixthFaceTexture = new THREE.TextureLoader().load(getOptimizedMediaPath("/cube/face-6-cube.webp", mediaVariant));
     sixthFaceTexture.colorSpace = THREE.SRGBColorSpace;
     rotateCubeTexture(sixthFaceTexture);
     const cubeBlackMaterial = new THREE.MeshBasicMaterial({
@@ -2257,7 +2259,7 @@ export default function Home() {
           {showcaseProject === "august22" ? (
             <>
               <div className="showcase-project-two-panel">
-                <video
+                <ResponsiveVideo
                   key="august22"
                   ref={showcaseProjectVideoRef}
                   className="showcase-project-two-film"
@@ -2274,7 +2276,7 @@ export default function Home() {
           ) : isAinowProject ? (
               <div className="showcase-pavilion">
                 {isHackathonVersion ? (
-                  <video
+                  <ResponsiveVideo
                     className="showcase-film"
                     ref={showcaseHeroVideoRef}
                     src="/showcase/exhibition-hero.mp4"
@@ -2286,7 +2288,7 @@ export default function Home() {
                     aria-label="Hackathon showcase film"
                   />
                 ) : (
-                  <img
+                  <ResponsiveImage
                     className="showcase-version-b-cover"
                     src="/showcase/ainow/version-b-cover.png"
                     alt="AI NOW Design Campaign cover in a public gallery"
@@ -2303,7 +2305,7 @@ export default function Home() {
           {isAinowProject || showcaseProject === "august22" ? (
             <header className="ainow-intro">
               <div className="ainow-intro-main">
-                <img
+                <ResponsiveImage
                   className="ainow-white-logo"
                   src={showcaseProject === "august22" ? "/showcase/project-two-logo.png" : "/showcase/ainow/logo-white.png"}
                   alt={showcaseProject === "august22" ? "日梦片场" : "AI NOW"}
@@ -2331,7 +2333,7 @@ export default function Home() {
 
           {showcaseProject === "august22" ? (
             <section className="showcase-project-two-gallery" aria-label="Project 2 visuals">
-              <img
+              <ResponsiveImage
                 src="/showcase/project-two-01.png"
                 alt="日梦片场项目概念图"
                 loading="lazy"
@@ -2349,7 +2351,7 @@ export default function Home() {
           <div className="ainow-rule" />
 
             <section className="ainow-manifesto">
-              <img
+              <ResponsiveImage
                 className="ainow-cyan-logo"
                 src={isHackathonVersion ? "/showcase/ainow/logo-cyan.png" : "/showcase/ainow/logo-version-a.png"}
                 alt="AI NOW"
@@ -2377,7 +2379,7 @@ export default function Home() {
           {!isHackathonVersion ? (
             <section className="ainow-version-a-gallery" aria-label="AI NOW Design Campaign applications">
               <figure className="ainow-version-a-artboard">
-                <img
+                <ResponsiveImage
                   className="ainow-version-a-artboard-base"
                   src="/showcase/ainow/version-a/01-253.png"
                   alt="AI NOW letter graphics and campaign applications"
@@ -2385,8 +2387,8 @@ export default function Home() {
                   decoding="async"
                 />
               </figure>
-              <figure><img src="/showcase/ainow/version-a/02-222.png" alt="CapCut AI NOW campaign key visual" loading="lazy" decoding="async" /></figure>
-              <figure><img src="/showcase/ainow/version-a/03-staff-visitor-guest.png" alt="AI NOW staff, visitor and guest identity cards" loading="lazy" decoding="async" /></figure>
+              <figure><ResponsiveImage src="/showcase/ainow/version-a/02-222.png" alt="CapCut AI NOW campaign key visual" loading="lazy" decoding="async" /></figure>
+              <figure><ResponsiveImage src="/showcase/ainow/version-a/03-staff-visitor-guest.png" alt="AI NOW staff, visitor and guest identity cards" loading="lazy" decoding="async" /></figure>
               <WayfindingScene />
             </section>
           ) : (
@@ -2438,7 +2440,7 @@ export default function Home() {
                   >
                     <div className="ainow-concept-unit">
                       <div className="ainow-label">{concept.label}</div>
-                      <img src={concept.image} alt={`${concept.label} concept`} />
+                      <ResponsiveImage src={concept.image} alt={`${concept.label} concept`} />
                       <div className="ainow-style">{concept.style}</div>
                     </div>
                   </article>
@@ -2453,7 +2455,7 @@ export default function Home() {
 
           <section className="ainow-gallery" aria-label="AI NOW Hackathon Showcase applications">
             <figure className="ainow-media-panel">
-                <img
+                <ResponsiveImage
                   src="/showcase/ainow/gallery/01-posters-1920.jpg"
                   srcSet="/showcase/ainow/gallery/01-posters-960.jpg 960w, /showcase/ainow/gallery/01-posters-1440.jpg 1440w, /showcase/ainow/gallery/01-posters-1920.jpg 1920w"
                   sizes="100vw"
@@ -2463,7 +2465,7 @@ export default function Home() {
                 />
             </figure>
             <figure className="ainow-media-panel ainow-video-panel">
-                <video
+                <ResponsiveVideo
                   src="/showcase/ainow/gallery/02-ai-now-kv.mp4"
                   poster="/showcase/ainow/gallery/02-ai-now-kv-poster.webp"
                   autoPlay
@@ -2475,7 +2477,7 @@ export default function Home() {
                 />
             </figure>
             <figure className="ainow-media-panel">
-                <img
+                <ResponsiveImage
                   src="/showcase/ainow/gallery/03-brand-applications-1920.jpg"
                   srcSet="/showcase/ainow/gallery/03-brand-applications-960.jpg 960w, /showcase/ainow/gallery/03-brand-applications-1440.jpg 1440w, /showcase/ainow/gallery/03-brand-applications-1920.jpg 1920w"
                   sizes="100vw"
@@ -2485,7 +2487,7 @@ export default function Home() {
                 />
             </figure>
             <figure className="ainow-media-panel">
-                <img
+                <ResponsiveImage
                   src="/showcase/ainow/gallery/04-event-stage-1920.jpg"
                   srcSet="/showcase/ainow/gallery/04-event-stage-960.jpg 960w, /showcase/ainow/gallery/04-event-stage-1440.jpg 1440w, /showcase/ainow/gallery/04-event-stage-1920.jpg 1920w"
                   sizes="100vw"

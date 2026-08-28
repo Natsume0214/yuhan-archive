@@ -408,7 +408,7 @@ body.loading-active { overflow: hidden; }
   z-index: 10;
   overflow: hidden;
   color: #f5f5f5;
-  background: #030303 url("/showcase/showcase-backdrop.png") center / cover no-repeat;
+  background: #030303 url("/media-optimized/desktop/showcase/showcase-backdrop.webp") center / cover no-repeat;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -578,7 +578,8 @@ body.loading-active { overflow: hidden; }
   margin: 0;
   overflow: hidden;
 }
-.hoo-panel > img {
+.hoo-panel > img,
+.hoo-panel > picture > img {
   display: block;
   width: 100%;
   height: auto;
@@ -1095,7 +1096,8 @@ body.loading-active { overflow: hidden; }
   overflow: hidden;
   pointer-events: none;
 }
-.muning-phone-reveal > img {
+.muning-phone-reveal > img,
+.muning-phone-reveal > picture > img {
   position: absolute;
   right: 0;
   bottom: 0;
@@ -1107,7 +1109,8 @@ body.loading-active { overflow: hidden; }
   transition: transform 720ms cubic-bezier(.22, 1, .36, 1);
   will-change: transform;
 }
-.muning-phone-reveal.is-visible > img { transform: translate3d(0, 0, 0); }
+.muning-phone-reveal.is-visible > img,
+.muning-phone-reveal.is-visible > picture > img { transform: translate3d(0, 0, 0); }
 .muning-logo-phone {
   top: 6%;
   right: 3%;
@@ -1299,7 +1302,8 @@ body.loading-active { overflow: hidden; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .muning-phone-reveal > img {
+  .muning-phone-reveal > img,
+  .muning-phone-reveal > picture > img {
     transform: translate3d(0, 0, 0);
     transition-duration: .01ms;
   }
@@ -1317,7 +1321,8 @@ body.loading-active { overflow: hidden; }
   margin: 0;
   overflow: hidden;
 }
-.holiday-kv-panel > img {
+.holiday-kv-panel > img,
+.holiday-kv-panel > picture > img {
   display: block;
   width: 100%;
   height: 100%;
@@ -1486,7 +1491,8 @@ body.loading-active { overflow: hidden; }
   margin: 0;
   overflow: hidden;
 }
-.other-works-item > img {
+.other-works-item > img,
+.other-works-item > picture > img {
   display: block;
   width: 100%;
   height: 100%;
@@ -1622,7 +1628,8 @@ body.loading-active { overflow: hidden; }
 
 .showcase-project-two-info { min-height: auto; }
 .showcase-project-two-gallery { width: 100%; }
-.showcase-project-two-gallery > img { display: block; width: 100%; height: auto; }
+.showcase-project-two-gallery > img,
+.showcase-project-two-gallery > picture > img { display: block; width: 100%; height: auto; }
 
 .project-two-exploration {
   position: relative;
@@ -1660,10 +1667,12 @@ body.loading-active { overflow: hidden; }
   pointer-events: none;
 }
 .project-two-exploration-note > img,
+.project-two-exploration-note > picture > img,
 .project-two-exploration-note > div {
   position: absolute;
 }
-.project-two-exploration-note > img {
+.project-two-exploration-note > img,
+.project-two-exploration-note > picture > img {
   display: block;
   height: auto;
 }
@@ -1688,7 +1697,8 @@ body.loading-active { overflow: hidden; }
   line-height: 1.42;
   letter-spacing: -.045em;
 }
-.project-two-exploration-note.is-open-air > img {
+.project-two-exploration-note.is-open-air > img,
+.project-two-exploration-note.is-open-air > picture > img {
   top: 15.19%;
   left: 8.82%;
   width: 4.58%;
@@ -1697,7 +1707,8 @@ body.loading-active { overflow: hidden; }
   top: 30.12%;
   left: 10.83%;
 }
-.project-two-exploration-note.is-cinema > img {
+.project-two-exploration-note.is-cinema > img,
+.project-two-exploration-note.is-cinema > picture > img {
   top: 6.3%;
   left: 39.17%;
   width: 7.85%;
@@ -1706,7 +1717,8 @@ body.loading-active { overflow: hidden; }
   top: 21.11%;
   left: 42.22%;
 }
-.project-two-exploration-note.is-screen > img {
+.project-two-exploration-note.is-screen > img,
+.project-two-exploration-note.is-screen > picture > img {
   top: 56.67%;
   left: 73.33%;
   width: 5.83%;
@@ -2586,6 +2598,7 @@ body.loading-active { overflow: hidden; }
   background: #000;
 }
 .ainow-media-panel > img,
+.ainow-media-panel > picture > img,
 .ainow-media-panel > video {
   display: block;
   width: 100%;
@@ -2601,6 +2614,10 @@ body.loading-active { overflow: hidden; }
 }
 
 @media (max-width: 700px) {
+  .showcase {
+    background-image: url("/media-optimized/mobile/showcase/showcase-backdrop.webp");
+  }
+
   /* Keep the mobile showcase inside the layout viewport. The desktop
      compositions intentionally use full-bleed/sticky media, but their
      intrinsic dimensions must not become the mobile page width. */
@@ -2651,6 +2668,7 @@ body.loading-active { overflow: hidden; }
   }
 
   .ainow-media-panel > img,
+  .ainow-media-panel > picture > img,
   .ainow-media-panel > video {
     width: 100%;
     max-width: 100%;
@@ -2662,6 +2680,7 @@ body.loading-active { overflow: hidden; }
   .showcase-version-b-cover,
   .showcase-project-two-film,
   .showcase-project-two-gallery > img,
+  .showcase-project-two-gallery > picture > img,
   .ainow-version-a-gallery img,
   .wayfinding-fallback {
     width: 100%;
