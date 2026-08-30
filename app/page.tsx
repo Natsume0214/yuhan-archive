@@ -612,8 +612,9 @@ function MuningPanel({ number }: { number: number }) {
           </MuningRevealText>
           <MuningRevealImage src="/showcase/muning/concept.png" alt="Concept" className="muning-concept-title" />
           <MuningRevealText className="muning-concept-copy">
-            打造一款温暖、清晰且易于使用的健康陪伴 App，集<br />
-            中查看家庭成员的活动、睡眠与关键健康数据，并在异常发生时及时获得提醒、沟通与照护支持
+            <span className="muning-concept-copy-desktop">打造一款温暖、清晰且易于使用的健康陪伴 App，<span className="muning-concept-copy-keep-together">集中</span>查看家庭成员的活动、睡眠与关键健康数据，并在异常发生时及时获得提醒、沟通与照护支持</span>
+            <span className="muning-concept-copy-mobile">打造一款温暖、清晰且易于使用的健康陪伴 App，集<br />
+              中查看家庭成员的活动、睡眠与关键健康数据，并在异常发生时及时获得提醒、沟通与照护支持</span>
           </MuningRevealText>
         </>
       ) : null}
