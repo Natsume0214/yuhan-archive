@@ -1046,6 +1046,8 @@ body.loading-active { overflow: hidden; }
 }
 .muning-about-copy { top: 34.7%; left: 4%; width: 27%; }
 .muning-concept-copy { top: 67.6%; left: 17.6%; width: 30%; }
+.muning-concept-copy-desktop { display: inline; }
+.muning-concept-copy-mobile { display: none; }
 
 .muning-logo-title {
   top: 20.8%;
@@ -1263,6 +1265,25 @@ body.loading-active { overflow: hidden; }
   margin: 0 0 .05em;
   font-size: clamp(8px, 1.02vw, 15px);
 }
+
+@media (min-width: 701px) {
+  /* The right-side content list has a taller line box than the left copy.
+     Lift the complete group so their visible bottoms share one baseline. */
+  .project-header__meta-group--content {
+    transform: translateY(-.4vw);
+  }
+
+  .muning-concept-copy-keep-together {
+    white-space: nowrap;
+  }
+
+  /* Align the visible glyph bottoms, not only the flex item boxes. */
+  .muning-alerts-header .muning-alerts-copy {
+    margin-bottom: 0;
+    transform: translateY(.2em);
+  }
+}
+
 .muning-alert-labels { position: absolute; z-index: 2; inset: 0; pointer-events: none; }
 .muning-alert-label {
   position: absolute;
@@ -2760,6 +2781,8 @@ body.loading-active { overflow: hidden; }
     line-height: 1.55;
     white-space: normal;
   }
+  .muning-concept-copy-desktop { display: none; }
+  .muning-concept-copy-mobile { display: inline; }
   .hoo-audience-conclusion,
   .hoo-logo-summary,
   .hoo-icon-copy,
