@@ -6,6 +6,12 @@ import { RoomEnvironment } from "three/examples/jsm/environments/RoomEnvironment
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
 import LoadingIntro from "./LoadingIntro";
 import WayfindingScene from "./WayfindingScene";
+import {
+  getOptimizedMediaPath,
+  MOBILE_MEDIA_QUERY,
+  ResponsiveImage,
+  ResponsiveVideo,
+} from "./ResponsiveMedia";
 
 const VIEWBOX = { width: 5442.52, height: 3061.42 };
 const LETTER_SEQUENCE_PORTION = 0.8;
@@ -16,6 +22,9 @@ const CUBE_INTRO_ROTATION_TURNS = 0.5;
 const CUBE_TURN_DURATION_MS = 520;
 const CUBE_WHEEL_STEP_THRESHOLD = 18;
 const CUBE_WHEEL_IDLE_MS = 180;
+const CUBE_TOUCH_DIRECTION_THRESHOLD = 10;
+const CUBE_TOUCH_STEP_THRESHOLD = 42;
+const isMobileViewport = () => window.matchMedia(MOBILE_MEDIA_QUERY).matches;
 const PROJECT_DIRECTORY = [
   { name: "AI Now · Version A", discipline: "Branding" },
   { name: "AI Now · Version B", discipline: "Branding" },
@@ -148,7 +157,7 @@ function OtherWorksItem({
 
   return (
     <figure ref={sectionRef} className={`other-works-item ${work.className}`}>
-      <img
+      <ResponsiveImage
         src={work.image}
         alt={`${work.category}：${work.title}`}
         loading={index === 0 ? "eager" : "lazy"}
@@ -187,10 +196,10 @@ function ProjectHeader({ project }: { project: ProjectHeaderProject }) {
   return (
     <section className={`project-header project-header--${project}`} aria-label={ariaLabel}>
       {project === "hoo" ? (
-        <img className="project-header__logo" src="/showcase/hoo/header-logo.png" alt="Hōo" />
+        <ResponsiveImage className="project-header__logo" src="/showcase/hoo/header-logo.png" alt="Hōo" />
       ) : null}
       {project === "muning" ? (
-        <img className="project-header__logo" src="/showcase/muning/header-logo.png" alt="Muning" />
+        <ResponsiveImage className="project-header__logo" src="/showcase/muning/header-logo.png" alt="Muning" />
       ) : null}
 
       <h2 className="project-header__title">
@@ -248,7 +257,7 @@ function HooPanel({ image, number }: { image: string; number: number }) {
 
   return (
     <figure ref={sectionRef} className={`hoo-panel hoo-panel--${number}`}>
-      <img
+      <ResponsiveImage
         src={image}
         alt={`Hōo 品牌设计展示 ${number}`}
         loading={number === 1 ? "eager" : "lazy"}
@@ -266,7 +275,7 @@ function HooPanel({ image, number }: { image: string; number: number }) {
           <p className="hoo-audience-question hoo-audience-question--right">需要怎样的「Hōo」？</p>
           <p className="hoo-audience-needs">疗愈<br />感知<br />韵律<br />同频</p>
           <p className={getRevealClassName(isVisible, "hoo-audience-conclusion")} style={getRevealStyle(0)}>
-            当人们对实体书店的需求逐渐从「售卖渠道」转变为一种「精神生态空间」<br />
+            <span className="hoo-audience-conclusion-line hoo-audience-conclusion-line--primary">当人们对实体书店的需求逐渐从「售卖渠道」转变为一种「精神生态空间」</span><br />
             我们不止卖书，我们在找寻自由呼吸的感觉
           </p>
         </figcaption>
@@ -274,7 +283,7 @@ function HooPanel({ image, number }: { image: string; number: number }) {
 
       {number === 3 ? (
         <figcaption className={getRevealClassName(isVisible, "hoo-copy hoo-logo-copy")} style={getRevealStyle(0)}>
-          <p className="hoo-logo-summary">将呼吸的吐纳融入中英文标志的设计，通过轻松的笔触展现品牌气质</p>
+          <p className="hoo-logo-summary"><span className="hoo-logo-summary-line">将呼吸的吐纳融入中英文标志的设计，</span><span className="hoo-logo-summary-line">通过轻松的笔触展现品牌气质</span></p>
           <p className="hoo-color hoo-color--deep"><span>深呼吸蓝</span><span>40C2FF</span></p>
           <p className="hoo-color hoo-color--light"><span>浅呼吸蓝</span><span>7CD5FF</span></p>
           <p className="hoo-color hoo-color--white"><span>放空白</span><span>FFFDEA</span></p>
@@ -283,7 +292,7 @@ function HooPanel({ image, number }: { image: string; number: number }) {
 
       {number === 4 ? (
         <figcaption className={getRevealClassName(isVisible, "hoo-copy hoo-icon-copy")} style={getRevealStyle(0)}>
-          延续轻松、流畅的曲线风格，构建图标导览系统
+          <span className="hoo-icon-copy-line">延续轻松、流畅的曲线风格，</span><span className="hoo-icon-copy-line">构建图标导览系统</span>
         </figcaption>
       ) : null}
 
@@ -371,7 +380,7 @@ function HolidayKvPanel({ image, number }: { image: string; number: number }) {
 
   return (
     <figure ref={sectionRef} className={`holiday-kv-panel holiday-kv-panel--${number}`}>
-      <img
+      <ResponsiveImage
         src={image}
         alt={`Holiday KV 项目展示 ${number}`}
         loading={number === 1 ? "eager" : "lazy"}
@@ -465,7 +474,7 @@ function MuningRevealImage({
   const { sectionRef, isVisible } = useScrollTriggeredReveal<HTMLImageElement>();
 
   return (
-    <img
+    <ResponsiveImage
       ref={animated ? sectionRef : undefined}
       className={animated ? getRevealClassName(isVisible, className) : className}
       style={animated ? getRevealStyle(delay) : undefined}
@@ -550,7 +559,7 @@ function MuningPhoneReveal({
 
   return (
     <div ref={sectionRef} className={`muning-phone-reveal ${className} ${isVisible ? "is-visible" : ""}`.trim()}>
-      <img src={src} alt={alt} style={{ transitionDelay: `${delay}ms` }} loading="lazy" decoding="async" />
+      <ResponsiveImage src={src} alt={alt} style={{ transitionDelay: `${delay}ms` }} loading="lazy" decoding="async" />
     </div>
   );
 }
@@ -569,7 +578,7 @@ function MuningPanel({ number }: { number: number }) {
   if (number === 4) {
     return (
       <figure className="muning-panel muning-panel--4 muning-logo-phone-panel">
-        <img
+        <ResponsiveImage
           className="muning-panel-base"
           src={image}
           alt="Muning Ring logo and app mockup background"
@@ -593,7 +602,7 @@ function MuningPanel({ number }: { number: number }) {
 
   return (
     <figure className={`muning-panel muning-panel--${number}`}>
-      <img
+      <ResponsiveImage
         className="muning-panel-base"
         src={image}
         alt={`Muning Ring project visual ${number}`}
@@ -607,14 +616,11 @@ function MuningPanel({ number }: { number: number }) {
           <MuningRevealHeading className="muning-project-heading">项目背景</MuningRevealHeading>
           <MuningRevealImage src="/showcase/muning/about.png" alt="About" className="muning-about-title" />
           <MuningRevealText className="muning-about-copy">
-            Muning Ring是一款主要面向家庭健康的AI智能戒指，<br />
-            让家人能够更安心地了解彼此的日常状态与健康变化
+            Muning Ring是一款主要面向家庭健康的AI<span className="muning-no-break">智能戒指，<br className="muning-desktop-break" />让家人</span>能够更安心地了解彼此的日常状态与健康变化<br className="muning-desktop-break" />
           </MuningRevealText>
           <MuningRevealImage src="/showcase/muning/concept.png" alt="Concept" className="muning-concept-title" />
           <MuningRevealText className="muning-concept-copy">
-            <span className="muning-concept-copy-desktop">打造一款温暖、清晰且易于使用的健康陪伴 App，<span className="muning-concept-copy-keep-together">集中</span>查看家庭成员的活动、睡眠与关键健康数据，并在异常发生时及时获得提醒、沟通与照护支持</span>
-            <span className="muning-concept-copy-mobile">打造一款温暖、清晰且易于使用的健康陪伴 App，集<br />
-              中查看家庭成员的活动、睡眠与关键健康数据，并在异常发生时及时获得提醒、沟通与照护支持</span>
+            打造一款温暖、清晰且易于使用的健康陪伴 App，<span className="muning-no-break">集<br className="muning-desktop-break" />中</span>查看家庭成员的活动、睡眠与关键健康数据，并在异常发生时及时获得提醒、沟通与照护支持
           </MuningRevealText>
         </>
       ) : null}
@@ -670,7 +676,7 @@ function MuningPanel({ number }: { number: number }) {
             <strong>主体字</strong>
             <b>SF Pro</b>
             <MuningRevealText className="muning-type-primary-copy">
-              建立清晰、可靠且适合健康数据阅读的界面基础，<br />让信息层级和操作体验更自然。
+              <span className="muning-type-primary-copy-line">建立清晰、可靠且适合健康数据</span><span className="muning-type-primary-copy-line muning-no-break">阅读的界面基础，</span><br className="muning-desktop-break" /><span className="muning-type-primary-copy-line">让信息层级和操作体验更自然。</span>
             </MuningRevealText>
           </div>
           <div className="muning-type-display">
@@ -687,15 +693,23 @@ function MuningPanel({ number }: { number: number }) {
         <>
           <MuningRevealImage src="/showcase/muning/onboarding-title.png" alt="Onboarding" className="muning-onboarding-title" animated={false} />
           <MuningRevealText className="muning-onboarding-copy">
-            以轻量、分步的方式帮助用户完成戒指配对，<br />
-            让复杂的健康守护关系从第一次使用就<br />
+            以轻量、分步的方式帮助用户完成戒指配对，<br className="muning-desktop-break" />
+            让复杂的健康守护关系从第一次使用就<br className="muning-desktop-break muning-onboarding-break--second" />
             清晰而有温度。
           </MuningRevealText>
           <MuningRevealImage src="/showcase/muning/homepage-title.png" alt="Homepage" className="muning-homepage-title" animated={false} />
           <MuningRevealText className="muning-homepage-copy">
-            区别于其他智能戒指产品，将Muning家庭页面作为首页<br /><br />
-            最关心的始终是家人的当下状态<br />
-            打开应用即可快速了解每个人是否安好
+            <span className="muning-homepage-copy--desktop">
+              区别于其他智能戒指产品，将Muning家庭页面作为首页<br /><br />
+              最关心的始终是家人的当下状态<br />
+              打开应用即可快速了解<span className="muning-no-break">每个人是否安好</span>
+            </span>
+            <span className="muning-homepage-copy--mobile">
+              区别于其他智能戒指产品<br />
+              Muning Ring 转而将家庭页面作为首页<br /><br />
+              最关心的始终是家人的当下状态<br />
+              打开即可迅速了解每个人的状态
+            </span>
           </MuningRevealText>
           <MuningRevealImage src="/showcase/muning/family-title.png" alt="Family" className="muning-family-title" animated={false} />
           <MuningRevealText className="muning-family-copy">是Muning Ring的核心</MuningRevealText>
@@ -744,16 +758,16 @@ function MuningGallery() {
 }
 
 const PROJECT_TWO_BUBBLES = [
-  { className: "is-seen", text: "希望我的作品可以「被看见」" },
-  { className: "is-presented", text: "最新的、最好的片子希望得到呈现" },
-  { className: "is-traditional", text: "传统影视从业者：" },
-  { className: "is-ranked", text: "希望我的片子能登上榜单" },
-  { className: "is-personal", text: "个人AI创作者：" },
-  { className: "is-platform", text: "我很需要一个可以当作作品名片的展示平台" },
-  { className: "is-trends", text: "想看到行业里的爆款与趋势" },
-  { className: "is-professional", text: "专业AI创作者：" },
-  { className: "is-collaboration", text: "能获得一些商业合作最好" },
-  { className: "is-explore", text: "想看看大家都在做什么样的" },
+  { className: "is-seen", text: "希望我的作品可以「被看见」", identity: false },
+  { className: "is-presented", text: "最新的、最好的片子希望得到呈现", identity: false },
+  { className: "is-traditional", text: "传统影视从业者", identity: true },
+  { className: "is-ranked", text: "希望我的片子能登上榜单", identity: false },
+  { className: "is-personal", text: "个人AI创作者", identity: true },
+  { className: "is-platform", text: "我很需要一个可以当作作品名片的展示平台", identity: false },
+  { className: "is-trends", text: "想看到行业里的爆款与趋势", identity: false },
+  { className: "is-professional", text: "专业AI创作者", identity: true },
+  { className: "is-collaboration", text: "能获得一些商业合作最好", identity: false },
+  { className: "is-explore", text: "想看看大家都在做什么样的", identity: false },
 ] as const;
 
 const PROJECT_TWO_SOLUTION_LABELS = ["表达展示", "行业洞悉", "创意激发"];
@@ -769,14 +783,14 @@ function ProjectTwoStory() {
   return (
     <section ref={storyRef} className="showcase-project-two-story" aria-label="Project 2 story">
       <div className="showcase-project-two-story-canvas">
-        <img
+        <ResponsiveImage
           className="showcase-project-two-story-background"
           src="/showcase/project-two-02.png"
           alt=""
           aria-hidden="true"
         />
 
-        <img
+        <ResponsiveImage
           className={getRevealClassName(isVisible, "project-two-story-layer project-two-question-title")}
           src="/showcase/project-two-question.png"
           alt="Question"
@@ -786,9 +800,9 @@ function ProjectTwoStory() {
           AI创作者需要的是什么样的平台？
         </p>
 
-        <img
+        <ResponsiveImage
           className="project-two-story-layer project-two-bubbles"
-          src="/showcase/project-two-bubbles.png"
+          src="/showcase/project-two-bubbles-0830-v2.png"
           alt=""
           aria-hidden="true"
         />
@@ -798,12 +812,12 @@ function ProjectTwoStory() {
               key={bubble.className}
               className={`project-two-bubble-copy ${bubble.className}`}
             >
-              <span>{bubble.text}</span>
+              <span>{bubble.text}{bubble.identity ? <span className="project-two-identity-colon">：</span> : null}</span>
             </div>
           ))}
         </div>
 
-        <img
+        <ResponsiveImage
           className={getRevealClassName(isVisible, "project-two-story-layer project-two-solution-title")}
           src="/showcase/project-two-solution.png"
           alt="Solution"
@@ -813,7 +827,7 @@ function ProjectTwoStory() {
           如何满足创作者的核心诉求？
         </p>
 
-        <img
+        <ResponsiveImage
           className={getRevealClassName(isVisible, "project-two-story-layer project-two-solutions")}
           src="/showcase/project-two-solutions.png"
           alt="三个创作者平台方向展示"
@@ -839,7 +853,7 @@ function ProjectTwoExploration() {
 
   return (
     <section ref={sectionRef} className="project-two-exploration" aria-labelledby="project-two-exploration-title">
-      <img
+      <ResponsiveImage
         className="project-two-exploration-background"
         src="/showcase/project-two-03.png"
         alt="日梦片场从露天观影会、电影院到巨幕荧屏的设计探索"
@@ -849,7 +863,7 @@ function ProjectTwoExploration() {
       <h2 id="project-two-exploration-title">设计探索</h2>
 
       <article className="project-two-exploration-note is-open-air">
-        <img className={getRevealClassName(isVisible)} style={getRevealStyle(100)} src="/showcase/exploration-1.png" alt="" aria-hidden="true" />
+        <ResponsiveImage className={getRevealClassName(isVisible)} style={getRevealStyle(100)} src="/showcase/exploration-1.png" alt="" aria-hidden="true" />
         <div className={getRevealClassName(isVisible)} style={getRevealStyle(180)}>
           <h3>露天观影会</h3>
           <p>意象新颖、交互有趣<br />但花苞场景通用性弱</p>
@@ -857,7 +871,7 @@ function ProjectTwoExploration() {
       </article>
 
       <article className="project-two-exploration-note is-cinema">
-        <img className={getRevealClassName(isVisible)} style={getRevealStyle(260)} src="/showcase/exploration-2.png" alt="" aria-hidden="true" />
+        <ResponsiveImage className={getRevealClassName(isVisible)} style={getRevealStyle(260)} src="/showcase/exploration-2.png" alt="" aria-hidden="true" />
         <div className={getRevealClassName(isVisible)} style={getRevealStyle(340)}>
           <h3>电影院</h3>
           <p>有观影氛围<br />但太传统、不够新</p>
@@ -865,7 +879,7 @@ function ProjectTwoExploration() {
       </article>
 
       <article className="project-two-exploration-note is-screen">
-        <img className={getRevealClassName(isVisible)} style={getRevealStyle(420)} src="/showcase/exploration-3.png" alt="" aria-hidden="true" />
+        <ResponsiveImage className={getRevealClassName(isVisible)} style={getRevealStyle(420)} src="/showcase/exploration-3.png" alt="" aria-hidden="true" />
         <div className={getRevealClassName(isVisible)} style={getRevealStyle(500)}>
           <h3>巨幕荧屏</h3>
           <p>沉浸感强<br />基于此继续延伸</p>
@@ -880,7 +894,7 @@ function ProjectTwoInterfaceMap() {
 
   return (
     <section ref={sectionRef} className="project-two-interface-map" aria-label="日梦片场首页、个人页与详情页设计">
-      <img
+      <ResponsiveImage
         className="project-two-interface-map-background"
         src="/showcase/project-two-04.png"
         alt="日梦片场项目移动端与网页端展示"
@@ -889,17 +903,17 @@ function ProjectTwoInterfaceMap() {
       />
 
       <article className="project-two-interface-note is-homepage">
-        <img className={getRevealClassName(isVisible)} style={getRevealStyle(0)} src="/showcase/project-two-homepage.png" alt="Homepage" />
+        <ResponsiveImage className={getRevealClassName(isVisible)} style={getRevealStyle(0)} src="/showcase/project-two-homepage.png" alt="Homepage" />
         <p className={getRevealClassName(isVisible)} style={getRevealStyle(80)}>线下的影院是集体造梦的场所<br />线上的平台是创作者深度共鸣的空间，首页设计融合两者特点</p>
       </article>
 
       <article className="project-two-interface-note is-profile">
-        <img className={getRevealClassName(isVisible)} style={getRevealStyle(160)} src="/showcase/project-two-profile.png" alt="Profile" />
+        <ResponsiveImage className={getRevealClassName(isVisible)} style={getRevealStyle(160)} src="/showcase/project-two-profile.png" alt="Profile" />
         <p className={getRevealClassName(isVisible)} style={getRevealStyle(240)}>个人页</p>
       </article>
 
       <article className="project-two-interface-note is-detail-page">
-        <img className={getRevealClassName(isVisible)} style={getRevealStyle(320)} src="/showcase/project-two-detail-page.png" alt="Detail page" />
+        <ResponsiveImage className={getRevealClassName(isVisible)} style={getRevealStyle(320)} src="/showcase/project-two-detail-page.png" alt="Detail page" />
         <p className={getRevealClassName(isVisible)} style={getRevealStyle(400)}>详情页</p>
       </article>
 
@@ -928,7 +942,7 @@ function ProjectTwoDetails() {
   return (
     <>
       <section className="project-two-details project-two-details--desktop" aria-label="即梦片场视觉细节">
-        <img
+        <ResponsiveImage
           className="project-two-details__background"
           src="/showcase/project-two-details/background.png"
           alt=""
@@ -938,7 +952,7 @@ function ProjectTwoDetails() {
         />
 
         <div className="project-two-details__card project-two-details__card--1">
-          <img
+          <ResponsiveImage
             src="/showcase/project-two-details/card-1.png"
             alt="清刻本悦宋特殊字体卡片"
             loading="lazy"
@@ -946,7 +960,7 @@ function ProjectTwoDetails() {
           />
         </div>
         <div className="project-two-details__card project-two-details__card--2">
-          <img
+          <ResponsiveImage
             src="/showcase/project-two-details/card-2.png"
             alt="即梦片场已点亮数据卡片"
             loading="lazy"
@@ -954,7 +968,7 @@ function ProjectTwoDetails() {
           />
         </div>
         <div className="project-two-details__card project-two-details__card--3">
-          <img
+          <ResponsiveImage
             src="/showcase/project-two-details/card-3.png"
             alt="即梦片场平板网站展示卡片"
             loading="lazy"
@@ -962,7 +976,7 @@ function ProjectTwoDetails() {
           />
         </div>
         <div className="project-two-details__card project-two-details__card--4">
-          <img
+          <ResponsiveImage
             src="/showcase/project-two-details/card-4.png"
             alt="即梦片场 Logo 卡片"
             loading="lazy"
@@ -970,7 +984,7 @@ function ProjectTwoDetails() {
           />
         </div>
         <div className="project-two-details__card project-two-details__card--5">
-          <img
+          <ResponsiveImage
             src="/showcase/project-two-details/card-5.png"
             alt="即梦片场图标卡片"
             loading="lazy"
@@ -978,7 +992,7 @@ function ProjectTwoDetails() {
           />
         </div>
 
-        <img
+        <ResponsiveImage
           className="project-two-details__title"
           src="/showcase/project-two-details/title.png"
           alt="Details"
@@ -989,12 +1003,14 @@ function ProjectTwoDetails() {
       </section>
 
       <figure className="project-two-details project-two-details--mobile">
-        <img
+        <ResponsiveImage
           src="/showcase/project-two-details/mobile-reference.png"
           alt="即梦片场项目视觉细节展示"
           loading="lazy"
           decoding="async"
         />
+        <div className="project-two-details__mobile-caption-mask" aria-hidden="true" />
+        <figcaption className="project-two-details__mobile-caption">字体选择、按钮光效、Logo设计都在与「影院梦感」呼应</figcaption>
       </figure>
     </>
   );
@@ -1055,6 +1071,7 @@ export default function Home() {
   const showcaseHeroVideoRef = useRef<HTMLVideoElement>(null);
   const showcaseProjectVideoRef = useRef<HTMLVideoElement>(null);
   const resumeWebglRef = useRef<(() => void) | null>(null);
+  const refreshWebglRef = useRef<(() => void) | null>(null);
   const cubeProjectSelectRef = useRef<((index: number) => void) | null>(null);
   const cubeDebugRef = useRef<((label: string, extra?: Record<string, unknown>) => void) | null>(null);
   const introBurstStartedAt = useRef<number | null>(null);
@@ -1070,7 +1087,26 @@ export default function Home() {
   const conceptPointerPosition = useRef({ x: 0, y: 0 });
   const conceptLockPosition = useRef({ x: 0, y: 0 });
   const pageScrollBeforeShowcase = useRef(0);
+  const closeRestoreFrameRef = useRef<number | null>(null);
+  const closeRefreshFrameRef = useRef<number | null>(null);
+  const closeSequenceRef = useRef(0);
+  const showcaseRestorePendingRef = useRef(false);
   const openShowcase = useCallback((project: ShowcaseProject = "ainow-a") => {
+    const mobile = isMobileViewport();
+    if (mobile) {
+      closeSequenceRef.current += 1;
+      if (closeRestoreFrameRef.current !== null) {
+        window.cancelAnimationFrame(closeRestoreFrameRef.current);
+        closeRestoreFrameRef.current = null;
+      }
+      if (closeRefreshFrameRef.current !== null) {
+        window.cancelAnimationFrame(closeRefreshFrameRef.current);
+        closeRefreshFrameRef.current = null;
+      }
+      showcaseOpenRef.current = true;
+      showcaseRestorePendingRef.current = false;
+      sectionRef.current?.classList.remove("cube-touch-active");
+    }
     cubeDebugRef.current?.("showcase-open-request", {
       project,
       scrollY: window.scrollY,
@@ -1080,22 +1116,73 @@ export default function Home() {
     setShowcaseOpen(true);
   }, []);
   const closeShowcase = useCallback(() => {
+    const mobile = isMobileViewport();
+    let closeSequence = 0;
+    if (mobile) {
+      closeSequence = closeSequenceRef.current + 1;
+      closeSequenceRef.current = closeSequence;
+      showcaseRestorePendingRef.current = true;
+      if (closeRestoreFrameRef.current !== null) window.cancelAnimationFrame(closeRestoreFrameRef.current);
+      if (closeRefreshFrameRef.current !== null) window.cancelAnimationFrame(closeRefreshFrameRef.current);
+    }
     cubeDebugRef.current?.("showcase-close-request", {
       currentScrollY: window.scrollY,
       targetScrollY: pageScrollBeforeShowcase.current,
     });
     setShowcaseOpen(false);
-    window.requestAnimationFrame(() => {
+
+    if (!mobile) {
+      window.requestAnimationFrame(() => {
+        const targetScrollY = pageScrollBeforeShowcase.current;
+        window.scrollTo({ top: targetScrollY, behavior: "auto" });
+        cubeDebugRef.current?.("showcase-scroll-restored", {
+          targetScrollY,
+          actualScrollY: window.scrollY,
+        });
+        window.requestAnimationFrame(() => {
+          cubeDebugRef.current?.("showcase-close-next-frame", {
+            actualScrollY: window.scrollY,
+          });
+        });
+      });
+      return;
+    }
+
+    closeRestoreFrameRef.current = window.requestAnimationFrame(() => {
+      closeRestoreFrameRef.current = null;
+      if (closeSequenceRef.current !== closeSequence) return;
       const targetScrollY = pageScrollBeforeShowcase.current;
       window.scrollTo({ top: targetScrollY, behavior: "auto" });
       cubeDebugRef.current?.("showcase-scroll-restored", {
         targetScrollY,
         actualScrollY: window.scrollY,
       });
-      window.requestAnimationFrame(() => {
+
+      const refreshAfterClose = (attempt = 0) => {
+        if (closeSequenceRef.current !== closeSequence) return;
+        if (showcaseOpenRef.current) {
+          if (attempt >= 4) return;
+          closeRefreshFrameRef.current = window.requestAnimationFrame(() => {
+            closeRefreshFrameRef.current = null;
+            refreshAfterClose(attempt + 1);
+          });
+          return;
+        }
         cubeDebugRef.current?.("showcase-close-next-frame", {
           actualScrollY: window.scrollY,
         });
+        const refreshWebgl = refreshWebglRef.current;
+        if (refreshWebgl) {
+          refreshWebgl();
+        } else {
+          showcaseRestorePendingRef.current = false;
+          resumeWebglRef.current?.();
+        }
+      };
+
+      closeRefreshFrameRef.current = window.requestAnimationFrame(() => {
+        closeRefreshFrameRef.current = null;
+        refreshAfterClose();
       });
     });
   }, []);
@@ -1108,6 +1195,9 @@ export default function Home() {
   }, []);
 
   useEffect(() => () => {
+    closeSequenceRef.current += 1;
+    if (closeRestoreFrameRef.current !== null) window.cancelAnimationFrame(closeRestoreFrameRef.current);
+    if (closeRefreshFrameRef.current !== null) window.cancelAnimationFrame(closeRefreshFrameRef.current);
     if (conceptHoverTimer.current !== null) window.clearTimeout(conceptHoverTimer.current);
     if (conceptMotionTimer.current !== null) window.clearTimeout(conceptMotionTimer.current);
     if (conceptRecenterFrame.current !== null) window.cancelAnimationFrame(conceptRecenterFrame.current);
@@ -1149,7 +1239,11 @@ export default function Home() {
 
   useEffect(() => {
     showcaseOpenRef.current = showcaseOpen;
-    if (!showcaseOpen) resumeWebglRef.current?.();
+    if (showcaseOpen) {
+      if (isMobileViewport()) showcaseRestorePendingRef.current = false;
+    } else if (!isMobileViewport()) {
+      resumeWebglRef.current?.();
+    }
   }, [showcaseOpen]);
 
   useEffect(() => {
@@ -1246,6 +1340,7 @@ export default function Home() {
     const CUBE_TEXTURE_HEIGHT_RATIO = CUBE_FACE_HEIGHT / CUBE_FACE_WIDTH;
     const CUBE_CONTENT_HOVER_SCALE = 1.03;
     const CUBE_CONTENT_HOVER_DURATION_MS = 200;
+    const mediaVariant = window.matchMedia("(max-width: 700px)").matches ? "mobile" : "desktop";
     const fitSquareTextureToWideFace = (texture: THREE.Texture) => {
       texture.repeat.set(1, CUBE_TEXTURE_HEIGHT_RATIO);
       texture.offset.set(0, (1 - CUBE_TEXTURE_HEIGHT_RATIO) / 2);
@@ -1253,7 +1348,7 @@ export default function Home() {
     };
     const createCubeVideo = (source: string) => {
       const video = document.createElement("video");
-      video.src = source;
+      video.src = getOptimizedMediaPath(source, mediaVariant);
       video.muted = true;
       video.loop = true;
       video.playsInline = true;
@@ -1296,22 +1391,22 @@ export default function Home() {
     // Projects 3 and 7 enter through the back face, whose UVs are upside down
     // from the front-facing presentation.
     rotateCubeTexture(secondCubeVideo.texture, true);
-    const firstFacePosterTexture = new THREE.TextureLoader().load("/cube/face-1-poster.webp");
+    const firstFacePosterTexture = new THREE.TextureLoader().load(getOptimizedMediaPath("/cube/face-1-poster.webp", mediaVariant));
     firstFacePosterTexture.colorSpace = THREE.SRGBColorSpace;
     fitSquareTextureToWideFace(firstFacePosterTexture);
     // The cube only needs a 2x display-resolution copy; the full-resolution PNG
     // remains the Version B project cover in the showcase.
-    const versionBCoverTexture = new THREE.TextureLoader().load("/showcase/ainow/version-b-cover-cube.webp");
+    const versionBCoverTexture = new THREE.TextureLoader().load(getOptimizedMediaPath("/showcase/ainow/version-b-cover-cube.webp", mediaVariant));
     versionBCoverTexture.colorSpace = THREE.SRGBColorSpace;
     // Projects after the two AI NOW entries use wide 16:9 cover art, so keep the full texture instead
     // of applying the square-cover crop used by the first two cube faces.
-    const thirdFaceTexture = new THREE.TextureLoader().load("/cube/face-3-cube.webp");
+    const thirdFaceTexture = new THREE.TextureLoader().load(getOptimizedMediaPath("/cube/face-3-cube.webp", mediaVariant));
     thirdFaceTexture.colorSpace = THREE.SRGBColorSpace;
-    const fourthFaceTexture = new THREE.TextureLoader().load("/cube/face-4-cube.webp");
+    const fourthFaceTexture = new THREE.TextureLoader().load(getOptimizedMediaPath("/cube/face-4-cube.webp", mediaVariant));
     fourthFaceTexture.colorSpace = THREE.SRGBColorSpace;
-    const fifthFaceTexture = new THREE.TextureLoader().load("/cube/face-5-cube.webp");
+    const fifthFaceTexture = new THREE.TextureLoader().load(getOptimizedMediaPath("/cube/face-5-cube.webp", mediaVariant));
     fifthFaceTexture.colorSpace = THREE.SRGBColorSpace;
-    const sixthFaceTexture = new THREE.TextureLoader().load("/cube/face-6-cube.webp");
+    const sixthFaceTexture = new THREE.TextureLoader().load(getOptimizedMediaPath("/cube/face-6-cube.webp", mediaVariant));
     sixthFaceTexture.colorSpace = THREE.SRGBColorSpace;
     rotateCubeTexture(sixthFaceTexture);
     const cubeBlackMaterial = new THREE.MeshBasicMaterial({
@@ -1464,6 +1559,14 @@ export default function Home() {
     const resize = () => {
       const width = host.clientWidth;
       const height = host.clientHeight;
+      if (isMobileViewport() && (width <= 0 || height <= 0)) {
+        recordCubeDebug("resize-skipped", {
+          resizeWidth: width,
+          resizeHeight: height,
+          reason: "zero-sized-host",
+        });
+        return;
+      }
       const aspect = width / height;
       recordCubeDebug("resize-before", { resizeWidth: width, resizeHeight: height, aspect: finiteOrValue(aspect) });
       const compositionAspect = VIEWBOX.width / VIEWBOX.height;
@@ -1551,6 +1654,11 @@ export default function Home() {
     let cubeWheelAccumulator = 0;
     let cubeWheelAccumulatorAt = 0;
     let cubeWheelGestureLocked = false;
+    let cubeTouchPointerId: number | null = null;
+    let cubeTouchStartY = 0;
+    let cubeTouchStartScrollY = 0;
+    let cubeTouchMoved = false;
+    let cubeTouchTurned = false;
     let renderedProgress = 0;
     let progressVelocity = 0;
     let previousFrameAt = 0;
@@ -1567,6 +1675,16 @@ export default function Home() {
     let cubeContentHoverMaterial: THREE.MeshBasicMaterial | null = null;
     let cubeContentHoverTransitionStartedAt = 0;
     let cubeHoverResolved = false;
+
+    const isCubeTouchInteractionActive = () => isMobileViewport()
+      && cubeInteractionEnabled
+      && directoryIsVisible
+      && !showcaseOpenRef.current
+      && !showcaseRef.current?.classList.contains("is-open");
+
+    const syncCubeTouchMode = () => {
+      section.classList.toggle("cube-touch-active", isCubeTouchInteractionActive());
+    };
 
     cubeContentMaterials.forEach((material) => {
       cubeContentHoverValues.set(material, 0);
@@ -1607,6 +1725,7 @@ export default function Home() {
     const syncDirectoryVisibility = (visible: boolean) => {
       if (directoryIsVisible === visible) return;
       directoryIsVisible = visible;
+      syncCubeTouchMode();
       pointerNeedsUpdate = true;
       setCubeDirectoryVisible(visible);
       recordCubeDebug("directory-visibility-change", {
@@ -1696,6 +1815,7 @@ export default function Home() {
 
     const handleCubeActivate = (event: PointerEvent) => {
       if (!cubeInteractionEnabled) return;
+      if (isMobileViewport() && cubeTouchMoved) return;
       const eventTarget = event.target;
       if (eventTarget instanceof Element && eventTarget.closest(".project-directory__item")) return;
       updatePointer(event);
@@ -1707,6 +1827,36 @@ export default function Home() {
     };
 
     const syncScrollProgress = () => {
+      const mobile = isMobileViewport();
+      const sectionHeight = section.offsetHeight;
+      const hostWidth = host.clientWidth;
+      const hostHeight = host.clientHeight;
+      if (
+        mobile
+        && (
+          showcaseOpenRef.current
+          || showcaseRestorePendingRef.current
+          || sectionHeight <= 0
+          || hostWidth <= 0
+          || hostHeight <= 0
+        )
+      ) {
+        const now = performance.now();
+        if (now - lastScrollDebugAt >= 500) {
+          lastScrollDebugAt = now;
+          recordCubeDebug("scroll-sync-skipped", {
+            reason: showcaseOpenRef.current
+              ? "showcase-open"
+              : showcaseRestorePendingRef.current
+                ? "showcase-close-pending"
+                : "zero-sized-layout",
+            sectionHeight,
+            hostWidth,
+            hostHeight,
+          });
+        }
+        return;
+      }
       const bounds = section.getBoundingClientRect();
       const distance = Math.max(1, section.offsetHeight - window.innerHeight);
       const raw = Math.max(0, Math.min(1, -bounds.top / distance));
@@ -1719,6 +1869,7 @@ export default function Home() {
       cubeInteractionEnabled = directoryIsVisible
         ? directoryProgress >= CUBE_DIRECTORY_HIDE_PROGRESS
         : directoryProgress >= CUBE_DIRECTORY_VISIBLE_PROGRESS;
+      syncCubeTouchMode();
       lastScrollAt = performance.now();
       if (
         lastScrollAt - lastScrollDebugAt >= 500
@@ -1791,11 +1942,98 @@ export default function Home() {
       }
     };
 
+    const handleCubeTouchStart = (event: PointerEvent) => {
+      if (event.pointerType !== "touch" || !event.isPrimary) return;
+      if (!isCubeTouchInteractionActive()) return;
+      const eventTarget = event.target;
+      if (eventTarget instanceof Element && eventTarget.closest(".project-directory__item")) return;
+
+      cubeTouchPointerId = event.pointerId;
+      cubeTouchStartY = event.clientY;
+      cubeTouchStartScrollY = window.scrollY;
+      cubeTouchMoved = false;
+      cubeTouchTurned = false;
+      try {
+        section.setPointerCapture(event.pointerId);
+      } catch {
+        // Pointer capture is best-effort on older mobile browsers.
+      }
+      event.preventDefault();
+    };
+
+    const handleCubeTouchMove = (event: PointerEvent) => {
+      if (event.pointerType !== "touch" || event.pointerId !== cubeTouchPointerId) return;
+      const scrollDelta = cubeTouchStartY - event.clientY;
+      if (Math.abs(scrollDelta) < CUBE_TOUCH_DIRECTION_THRESHOLD) return;
+
+      cubeTouchMoved = true;
+      event.preventDefault();
+      const direction = Math.sign(scrollDelta);
+
+      // Match the desktop wheel behavior at the first face: a reverse swipe
+      // exits the cube sequence instead of turning past its starting face.
+      // Because this gesture already has touch-action:none, move the page
+      // explicitly until the normal scroll-driven state takes over again.
+      if (direction < 0 && cubeFaceIndex === 0 && !cubeTurning) {
+        window.scrollTo(0, Math.max(0, cubeTouchStartScrollY + scrollDelta));
+        return;
+      }
+
+      if (!isCubeTouchInteractionActive() || cubeTouchTurned || cubeTurning) return;
+      if (Math.abs(scrollDelta) < CUBE_TOUCH_STEP_THRESHOLD) return;
+
+      cubeTouchTurned = true;
+      const nextFace = cubeFaceIndex + direction;
+      if (nextFace >= 0 && nextFace < PROJECT_DIRECTORY.length) {
+        startCubeFaceTurn(nextFace);
+      }
+    };
+
+    const handleCubeTouchEnd = (event: PointerEvent) => {
+      if (event.pointerId !== cubeTouchPointerId) return;
+      try {
+        if (section.hasPointerCapture(event.pointerId)) section.releasePointerCapture(event.pointerId);
+      } catch {
+        // Pointer capture cleanup is best-effort on older mobile browsers.
+      }
+      cubeTouchPointerId = null;
+      cubeTouchStartY = 0;
+      cubeTouchStartScrollY = 0;
+      cubeTouchMoved = false;
+      cubeTouchTurned = false;
+    };
+
     function scheduleDraw() {
       if (!disposed && !showcaseOpenRef.current && document.visibilityState === "visible" && !animationFrame) {
         animationFrame = window.requestAnimationFrame(draw);
       }
     }
+
+    const refreshWebgl = () => {
+      if (!isMobileViewport()) {
+        resumeWebglRef.current?.();
+        return;
+      }
+      if (disposed || showcaseOpenRef.current) return;
+      const width = host.clientWidth;
+      const height = host.clientHeight;
+      if (section.offsetHeight <= 0 || width <= 0 || height <= 0) {
+        recordCubeDebug("showcase-refresh-skipped", {
+          reason: "layout-not-restored",
+          sectionHeight: section.offsetHeight,
+          hostWidth: width,
+          hostHeight: height,
+        });
+        return;
+      }
+      resize();
+      showcaseRestorePendingRef.current = false;
+      syncScrollProgress();
+      recordCubeDebug("showcase-refresh-after-close", {
+        actualScrollY: window.scrollY,
+      });
+      scheduleDraw();
+    };
 
     function draw(now: number) {
       animationFrame = 0;
@@ -2035,6 +2273,7 @@ export default function Home() {
     resize();
     syncScrollProgress();
     resumeWebglRef.current = scheduleDraw;
+    refreshWebglRef.current = refreshWebgl;
     scheduleDraw();
     window.addEventListener("resize", resize);
     window.addEventListener("scroll", syncScrollProgress, { passive: true });
@@ -2043,6 +2282,10 @@ export default function Home() {
     section.addEventListener("pointermove", updatePointer);
     section.addEventListener("pointerleave", clearPointer);
     section.addEventListener("pointerup", handleCubeActivate);
+    section.addEventListener("pointerdown", handleCubeTouchStart, { passive: false });
+    section.addEventListener("pointermove", handleCubeTouchMove, { passive: false });
+    section.addEventListener("pointerup", handleCubeTouchEnd);
+    section.addEventListener("pointercancel", handleCubeTouchEnd);
     renderer.domElement.addEventListener("webglcontextlost", handleWebglContextLost);
     renderer.domElement.addEventListener("webglcontextrestored", handleWebglContextRestored);
 
@@ -2055,6 +2298,11 @@ export default function Home() {
       section.removeEventListener("pointermove", updatePointer);
       section.removeEventListener("pointerleave", clearPointer);
       section.removeEventListener("pointerup", handleCubeActivate);
+      section.removeEventListener("pointerdown", handleCubeTouchStart);
+      section.removeEventListener("pointermove", handleCubeTouchMove);
+      section.removeEventListener("pointerup", handleCubeTouchEnd);
+      section.removeEventListener("pointercancel", handleCubeTouchEnd);
+      section.classList.remove("cube-touch-active");
       renderer.domElement.removeEventListener("webglcontextlost", handleWebglContextLost);
       renderer.domElement.removeEventListener("webglcontextrestored", handleWebglContextRestored);
       section.style.cursor = "";
@@ -2089,6 +2337,7 @@ export default function Home() {
       pmrem.dispose();
       renderer.dispose();
       renderer.domElement.remove();
+      if (refreshWebglRef.current === refreshWebgl) refreshWebglRef.current = null;
       resumeWebglRef.current = null;
     };
   }, [openShowcase]);
@@ -2258,7 +2507,7 @@ export default function Home() {
           {showcaseProject === "august22" ? (
             <>
               <div className="showcase-project-two-panel">
-                <video
+                <ResponsiveVideo
                   key="august22"
                   ref={showcaseProjectVideoRef}
                   className="showcase-project-two-film"
@@ -2275,7 +2524,7 @@ export default function Home() {
           ) : isAinowProject ? (
               <div className="showcase-pavilion">
                 {isHackathonVersion ? (
-                  <video
+                  <ResponsiveVideo
                     className="showcase-film"
                     ref={showcaseHeroVideoRef}
                     src="/showcase/exhibition-hero.mp4"
@@ -2287,7 +2536,7 @@ export default function Home() {
                     aria-label="Hackathon showcase film"
                   />
                 ) : (
-                  <img
+                  <ResponsiveImage
                     className="showcase-version-b-cover"
                     src="/showcase/ainow/version-b-cover.png"
                     alt="AI NOW Design Campaign cover in a public gallery"
@@ -2304,7 +2553,7 @@ export default function Home() {
           {isAinowProject || showcaseProject === "august22" ? (
             <header className="ainow-intro">
               <div className="ainow-intro-main">
-                <img
+                <ResponsiveImage
                   className="ainow-white-logo"
                   src={showcaseProject === "august22" ? "/showcase/project-two-logo.png" : "/showcase/ainow/logo-white.png"}
                   alt={showcaseProject === "august22" ? "日梦片场" : "AI NOW"}
@@ -2332,7 +2581,7 @@ export default function Home() {
 
           {showcaseProject === "august22" ? (
             <section className="showcase-project-two-gallery" aria-label="Project 2 visuals">
-              <img
+              <ResponsiveImage
                 src="/showcase/project-two-01.png"
                 alt="日梦片场项目概念图"
                 loading="lazy"
@@ -2349,8 +2598,8 @@ export default function Home() {
             <>
           <div className="ainow-rule" />
 
-            <section className="ainow-manifesto">
-              <img
+            <section className={`ainow-manifesto${isHackathonVersion ? " ainow-manifesto--version-a" : ""}`}>
+              <ResponsiveImage
                 className="ainow-cyan-logo"
                 src={isHackathonVersion ? "/showcase/ainow/logo-cyan.png" : "/showcase/ainow/logo-version-a.png"}
                 alt="AI NOW"
@@ -2378,7 +2627,7 @@ export default function Home() {
           {!isHackathonVersion ? (
             <section className="ainow-version-a-gallery" aria-label="AI NOW Design Campaign applications">
               <figure className="ainow-version-a-artboard">
-                <img
+                <ResponsiveImage
                   className="ainow-version-a-artboard-base"
                   src="/showcase/ainow/version-a/01-253.png"
                   alt="AI NOW letter graphics and campaign applications"
@@ -2386,8 +2635,8 @@ export default function Home() {
                   decoding="async"
                 />
               </figure>
-              <figure><img src="/showcase/ainow/version-a/02-222.png" alt="CapCut AI NOW campaign key visual" loading="lazy" decoding="async" /></figure>
-              <figure><img src="/showcase/ainow/version-a/03-staff-visitor-guest.png" alt="AI NOW staff, visitor and guest identity cards" loading="lazy" decoding="async" /></figure>
+              <figure><ResponsiveImage src="/showcase/ainow/version-a/02-222.png" alt="CapCut AI NOW campaign key visual" loading="lazy" decoding="async" /></figure>
+              <figure><ResponsiveImage src="/showcase/ainow/version-a/03-staff-visitor-guest.png" alt="AI NOW staff, visitor and guest identity cards" loading="lazy" decoding="async" /></figure>
               <WayfindingScene />
             </section>
           ) : (
@@ -2439,7 +2688,7 @@ export default function Home() {
                   >
                     <div className="ainow-concept-unit">
                       <div className="ainow-label">{concept.label}</div>
-                      <img src={concept.image} alt={`${concept.label} concept`} />
+                      <ResponsiveImage src={concept.image} alt={`${concept.label} concept`} />
                       <div className="ainow-style">{concept.style}</div>
                     </div>
                   </article>
@@ -2454,7 +2703,7 @@ export default function Home() {
 
           <section className="ainow-gallery" aria-label="AI NOW Hackathon Showcase applications">
             <figure className="ainow-media-panel">
-                <img
+                <ResponsiveImage
                   src="/showcase/ainow/gallery/01-posters-1920.jpg"
                   srcSet="/showcase/ainow/gallery/01-posters-960.jpg 960w, /showcase/ainow/gallery/01-posters-1440.jpg 1440w, /showcase/ainow/gallery/01-posters-1920.jpg 1920w"
                   sizes="100vw"
@@ -2464,7 +2713,7 @@ export default function Home() {
                 />
             </figure>
             <figure className="ainow-media-panel ainow-video-panel">
-                <video
+                <ResponsiveVideo
                   src="/showcase/ainow/gallery/02-ai-now-kv.mp4"
                   poster="/showcase/ainow/gallery/02-ai-now-kv-poster.webp"
                   autoPlay
@@ -2476,7 +2725,7 @@ export default function Home() {
                 />
             </figure>
             <figure className="ainow-media-panel">
-                <img
+                <ResponsiveImage
                   src="/showcase/ainow/gallery/03-brand-applications-1920.jpg"
                   srcSet="/showcase/ainow/gallery/03-brand-applications-960.jpg 960w, /showcase/ainow/gallery/03-brand-applications-1440.jpg 1440w, /showcase/ainow/gallery/03-brand-applications-1920.jpg 1920w"
                   sizes="100vw"
@@ -2486,7 +2735,7 @@ export default function Home() {
                 />
             </figure>
             <figure className="ainow-media-panel">
-                <img
+                <ResponsiveImage
                   src="/showcase/ainow/gallery/04-event-stage-1920.jpg"
                   srcSet="/showcase/ainow/gallery/04-event-stage-960.jpg 960w, /showcase/ainow/gallery/04-event-stage-1440.jpg 1440w, /showcase/ainow/gallery/04-event-stage-1920.jpg 1920w"
                   sizes="100vw"

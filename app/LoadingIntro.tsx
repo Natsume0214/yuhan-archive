@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { getOptimizedMediaPath, ResponsiveImage } from "./ResponsiveMedia";
 
 type LoadingIntroProps = {
   ready?: boolean;
@@ -141,11 +142,12 @@ export default function LoadingIntro({ ready = true, onComplete, onBurstStart }:
       window.setTimeout(() => setPhase(index + 1), delay)
     ));
 
+    const mediaVariant = window.matchMedia("(max-width: 700px)").matches ? "mobile" : "desktop";
     const preloads = LOADING_ASSETS.map((source) => new Promise<void>((resolve) => {
       const image = new Image();
       image.onload = () => resolve();
       image.onerror = () => resolve();
-      image.src = source;
+      image.src = getOptimizedMediaPath(source, mediaVariant);
     }));
     Promise.all(preloads).then(() => setAssetsReady(true));
 
@@ -259,7 +261,7 @@ export default function LoadingIntro({ ready = true, onComplete, onBurstStart }:
                         key={`${index}-${asset.src}`}
                         className={`loading-intro__slot ${asset.className}`}
                       >
-                        <img src={asset.src} alt="" />
+                        <ResponsiveImage src={asset.src} alt="" />
                       </span>
                     ) : null)}
                     <span>NG</span>

@@ -396,7 +396,7 @@ body.loading-active { overflow: hidden; }
 
   .project-directory__item {
     font-size: clamp(24px, 6.8vw, 44px);
-    filter: blur(3px);
+    filter: blur(1px);
   }
 
   .project-directory__item.is-active { filter: blur(0); }
@@ -408,7 +408,7 @@ body.loading-active { overflow: hidden; }
   z-index: 10;
   overflow: hidden;
   color: #f5f5f5;
-  background: #030303 url("/showcase/showcase-backdrop.png") center / cover no-repeat;
+  background: #030303 url("/media-optimized/desktop/showcase/showcase-backdrop.webp") center / cover no-repeat;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -578,7 +578,8 @@ body.loading-active { overflow: hidden; }
   margin: 0;
   overflow: hidden;
 }
-.hoo-panel > img {
+.hoo-panel > img,
+.hoo-panel > picture > img {
   display: block;
   width: 100%;
   height: auto;
@@ -1046,8 +1047,6 @@ body.loading-active { overflow: hidden; }
 }
 .muning-about-copy { top: 34.7%; left: 4%; width: 27%; }
 .muning-concept-copy { top: 67.6%; left: 17.6%; width: 30%; }
-.muning-concept-copy-desktop { display: inline; }
-.muning-concept-copy-mobile { display: none; }
 
 .muning-logo-title {
   top: 20.8%;
@@ -1097,7 +1096,8 @@ body.loading-active { overflow: hidden; }
   overflow: hidden;
   pointer-events: none;
 }
-.muning-phone-reveal > img {
+.muning-phone-reveal > img,
+.muning-phone-reveal > picture > img {
   position: absolute;
   right: 0;
   bottom: 0;
@@ -1109,7 +1109,8 @@ body.loading-active { overflow: hidden; }
   transition: transform 720ms cubic-bezier(.22, 1, .36, 1);
   will-change: transform;
 }
-.muning-phone-reveal.is-visible > img { transform: translate3d(0, 0, 0); }
+.muning-phone-reveal.is-visible > img,
+.muning-phone-reveal.is-visible > picture > img { transform: translate3d(0, 0, 0); }
 .muning-logo-phone {
   top: 6%;
   right: 3%;
@@ -1232,6 +1233,7 @@ body.loading-active { overflow: hidden; }
   text-align: right;
   font-size: clamp(8px, 1.03vw, 16px);
 }
+.muning-homepage-copy--mobile { display: none; }
 .muning-family-title { top: 88%; left: 8.4%; width: 7.5%; }
 .muning-family-copy {
   top: 91.5%;
@@ -1267,17 +1269,26 @@ body.loading-active { overflow: hidden; }
 }
 
 @media (min-width: 701px) {
-  /* The right-side content list has a taller line box than the left copy.
-     Lift the complete group so their visible bottoms share one baseline. */
   .project-header__meta-group--content {
     transform: translateY(-.4vw);
   }
 
-  .muning-concept-copy-keep-together {
+  .muning-onboarding-copy {
+    width: min(22.5%, 19.2em);
+  }
+
+  .muning-concept-copy .muning-no-break {
     white-space: nowrap;
   }
 
-  /* Align the visible glyph bottoms, not only the flex item boxes. */
+  .muning-concept-copy .muning-desktop-break {
+    display: none;
+  }
+
+  .muning-onboarding-copy .muning-onboarding-break--second {
+    display: none;
+  }
+
   .muning-alerts-header .muning-alerts-copy {
     margin-bottom: 0;
     transform: translateY(.2em);
@@ -1320,7 +1331,8 @@ body.loading-active { overflow: hidden; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .muning-phone-reveal > img {
+  .muning-phone-reveal > img,
+  .muning-phone-reveal > picture > img {
     transform: translate3d(0, 0, 0);
     transition-duration: .01ms;
   }
@@ -1338,7 +1350,8 @@ body.loading-active { overflow: hidden; }
   margin: 0;
   overflow: hidden;
 }
-.holiday-kv-panel > img {
+.holiday-kv-panel > img,
+.holiday-kv-panel > picture > img {
   display: block;
   width: 100%;
   height: 100%;
@@ -1507,7 +1520,8 @@ body.loading-active { overflow: hidden; }
   margin: 0;
   overflow: hidden;
 }
-.other-works-item > img {
+.other-works-item > img,
+.other-works-item > picture > img {
   display: block;
   width: 100%;
   height: 100%;
@@ -1643,7 +1657,8 @@ body.loading-active { overflow: hidden; }
 
 .showcase-project-two-info { min-height: auto; }
 .showcase-project-two-gallery { width: 100%; }
-.showcase-project-two-gallery > img { display: block; width: 100%; height: auto; }
+.showcase-project-two-gallery > img,
+.showcase-project-two-gallery > picture > img { display: block; width: 100%; height: auto; }
 
 .project-two-exploration {
   position: relative;
@@ -1681,10 +1696,12 @@ body.loading-active { overflow: hidden; }
   pointer-events: none;
 }
 .project-two-exploration-note > img,
+.project-two-exploration-note > picture > img,
 .project-two-exploration-note > div {
   position: absolute;
 }
-.project-two-exploration-note > img {
+.project-two-exploration-note > img,
+.project-two-exploration-note > picture > img {
   display: block;
   height: auto;
 }
@@ -1709,7 +1726,8 @@ body.loading-active { overflow: hidden; }
   line-height: 1.42;
   letter-spacing: -.045em;
 }
-.project-two-exploration-note.is-open-air > img {
+.project-two-exploration-note.is-open-air > img,
+.project-two-exploration-note.is-open-air > picture > img {
   top: 15.19%;
   left: 8.82%;
   width: 4.58%;
@@ -1718,7 +1736,8 @@ body.loading-active { overflow: hidden; }
   top: 30.12%;
   left: 10.83%;
 }
-.project-two-exploration-note.is-cinema > img {
+.project-two-exploration-note.is-cinema > img,
+.project-two-exploration-note.is-cinema > picture > img {
   top: 6.3%;
   left: 39.17%;
   width: 7.85%;
@@ -1727,7 +1746,8 @@ body.loading-active { overflow: hidden; }
   top: 21.11%;
   left: 42.22%;
 }
-.project-two-exploration-note.is-screen > img {
+.project-two-exploration-note.is-screen > img,
+.project-two-exploration-note.is-screen > picture > img {
   top: 56.67%;
   left: 73.33%;
   width: 5.83%;
@@ -1825,6 +1845,9 @@ body.loading-active { overflow: hidden; }
 }
 
 .project-two-details--mobile { display: none; }
+
+.project-two-details__mobile-caption,
+.project-two-details__mobile-caption-mask { display: none; }
 
 .project-two-details__background,
 .project-two-details__card,
@@ -2607,6 +2630,7 @@ body.loading-active { overflow: hidden; }
   background: #000;
 }
 .ainow-media-panel > img,
+.ainow-media-panel > picture > img,
 .ainow-media-panel > video {
   display: block;
   width: 100%;
@@ -2622,6 +2646,20 @@ body.loading-active { overflow: hidden; }
 }
 
 @media (max-width: 700px) {
+  .showcase {
+    background-image: url("/media-optimized/mobile/showcase/showcase-backdrop.webp");
+  }
+
+  :root {
+    --mobile-body-size: clamp(8px, 1.75vw, 12px);
+    --mobile-compact-size: clamp(8px, 1.55vw, 10px);
+    --mobile-lead-size: clamp(10px, 2.3vw, 15px);
+    --mobile-section-title-size: clamp(13px, 3.2vw, 18px);
+    --mobile-display-mark-size: clamp(20px, 3.82vw, 48px);
+    --mobile-display-core-size: clamp(14px, 2.45vw, 32px);
+    --mobile-annotation-size: clamp(6px, 1.3vw, 8px);
+  }
+
   /* Keep the mobile showcase inside the layout viewport. The desktop
      compositions intentionally use full-bleed/sticky media, but their
      intrinsic dimensions must not become the mobile page width. */
@@ -2672,6 +2710,7 @@ body.loading-active { overflow: hidden; }
   }
 
   .ainow-media-panel > img,
+  .ainow-media-panel > picture > img,
   .ainow-media-panel > video {
     width: 100%;
     max-width: 100%;
@@ -2683,6 +2722,7 @@ body.loading-active { overflow: hidden; }
   .showcase-version-b-cover,
   .showcase-project-two-film,
   .showcase-project-two-gallery > img,
+  .showcase-project-two-gallery > picture > img,
   .ainow-version-a-gallery img,
   .wayfinding-fallback {
     width: 100%;
@@ -2713,6 +2753,7 @@ body.loading-active { overflow: hidden; }
 
   .project-two-details--desktop { display: none; }
   .project-two-details--mobile {
+    position: relative;
     display: block;
     width: 100%;
     max-width: 100%;
@@ -2727,6 +2768,37 @@ body.loading-active { overflow: hidden; }
     width: 100%;
     max-width: 100%;
     height: auto;
+  }
+  .project-two-details__mobile-caption-mask {
+    position: absolute;
+    z-index: 1;
+    top: 84.8%;
+    right: 13.61%;
+    display: block;
+    width: 50%;
+    height: 11%;
+    background-color: #fff;
+    background-image: radial-gradient(circle, rgba(180, 179, 177, .72) .55px, transparent .85px);
+    background-size: 2.75vw 2.75vw;
+    pointer-events: none;
+  }
+  .project-two-details__mobile-caption {
+    position: absolute;
+    z-index: 2;
+    top: 85.45%;
+    right: 13.61%;
+    display: block;
+    width: 50%;
+    margin: 0;
+    color: #645d50;
+    font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+    font-size: var(--mobile-body-size);
+    font-weight: 400;
+    line-height: 1.45;
+    letter-spacing: -.04em;
+    text-align: right;
+    pointer-events: none;
+    user-select: none;
   }
 
   /* Keep the last Other works caption clear of the first right-side image. */
@@ -2766,7 +2838,7 @@ body.loading-active { overflow: hidden; }
   .muning-avatar-copy,
   .muning-type-primary-copy,
   .muning-type-display-copy {
-    font-size: 8px;
+    font-size: var(--mobile-body-size);
   }
   .project-header__title {
     font-size: 22px;
@@ -2781,19 +2853,129 @@ body.loading-active { overflow: hidden; }
     line-height: 1.55;
     white-space: normal;
   }
-  .muning-concept-copy-desktop { display: none; }
-  .muning-concept-copy-mobile { display: inline; }
   .hoo-audience-conclusion,
   .hoo-logo-summary,
   .hoo-icon-copy,
   .hoo-type-description {
-    font-size: 8px;
+    font-size: var(--mobile-body-size);
     white-space: normal;
   }
+  .hoo-audience-question {
+    font-size: var(--mobile-annotation-size);
+    line-height: 1.3;
+    letter-spacing: 0;
+  }
+  .hoo-audience-tempo {
+    top: 41.3%;
+    left: 9.45%;
+    width: max-content;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .hoo-audience-needs {
+    top: 43.1%;
+    left: 85.95%;
+    width: max-content;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .hoo-audience-conclusion {
+    left: 4%;
+    width: 92%;
+  }
+  .hoo-audience-conclusion-line--primary { white-space: nowrap; }
   .hoo-logo-summary {
-    left: 6.95%;
+    left: 28.75%;
+    right: auto;
+    width: 57.5%;
+    transform: translateX(-50%);
+    text-align: center;
+    line-height: 1.55;
+  }
+  .hoo-logo-summary-line { display: block; }
+  .hoo-icon-copy-line { display: block; }
+
+  .muning-no-break { white-space: nowrap; }
+  .muning-desktop-break { display: none; }
+  .muning-about-title { top: 22.2%; }
+  .muning-about-copy { top: 29.1%; }
+  .muning-logo-phone-copy-anchor { top: 8.9%; }
+  .muning-homepage-copy {
     right: 6%;
-    width: auto;
+    width: 36%;
+  }
+  .muning-onboarding-copy { width: min(35%, 13em); }
+  .muning-homepage-copy--desktop { display: none; }
+  .muning-homepage-copy--mobile { display: inline; }
+  .muning-type-primary-copy-line {
+    display: block;
+    max-width: 100%;
+  }
+  .muning-type-primary-copy {
+    width: min(100%, 14em);
+  }
+  .muning-alerts-header .muning-alerts-title {
+    transform: translateY(-.18em);
+  }
+  .muning-alerts-header .muning-alerts-copy {
+    margin-bottom: 0;
+  }
+
+  .muning-about-copy,
+  .muning-concept-copy,
+  .muning-logo-dark-copy,
+  .muning-color-copy,
+  .muning-onboarding-copy,
+  .muning-homepage-copy,
+  .muning-family-copy,
+  .muning-alerts-header .muning-alerts-copy,
+  .muning-health-copy,
+  .muning-palette-card,
+  .other-works-item figcaption p,
+  .holiday-kv-background-summary,
+  .holiday-kv-metrics,
+  .holiday-kv-times-square,
+  .holiday-kv-strategy-body p,
+  .project-two-exploration-note p,
+  .project-two-interface-note p,
+  .project-two-bubble-copy,
+  .project-two-solution-captions,
+  .project-two-hover-card,
+  .ainow-manifesto-copy > p,
+  .ainow-closing {
+    font-size: var(--mobile-body-size);
+  }
+
+  .ainow-manifesto-copy > p,
+  .ainow-closing {
+    font-size: var(--mobile-lead-size);
+  }
+
+  .muning-project-heading,
+  .muning-color-heading,
+  .muning-avatar-heading,
+  .muning-type-heading,
+  .holiday-kv-background-copy > h2,
+  .holiday-kv-strategy > h2,
+  .holiday-kv-style-title,
+  .project-two-exploration > h2 {
+    font-size: var(--mobile-section-title-size);
+  }
+
+  .holiday-kv-deliverable-labels,
+  .muning-alert-label {
+    font-size: var(--mobile-annotation-size);
+  }
+
+  .project-two-solution-labels {
+    font-size: var(--mobile-compact-size);
+  }
+
+  .holiday-kv-strategy-body strong {
+    font-size: var(--mobile-display-mark-size);
+  }
+  .holiday-kv-strategy-body b {
+    font-size: var(--mobile-display-core-size);
   }
   .project-header__meta {
     display: grid;
@@ -2810,16 +2992,36 @@ body.loading-active { overflow: hidden; }
 
   .ainow-intro { grid-template-columns: 1fr; gap: 42px; }
   .ainow-meta { grid-template-columns: 1fr 1fr; gap: 18px; }
-  .project-two-story-subtitle { font-size: clamp(10px, 2.3vw, 17px); }
+  .project-two-story-subtitle { font-size: var(--mobile-lead-size); }
   .project-two-bubble-copy {
     padding-inline: 5%;
-    font-size: clamp(7px, 1.8vw, 14px);
     white-space: normal;
   }
-  .project-two-solution-labels { font-size: clamp(9px, 2.2vw, 16px); }
-  .project-two-solution-captions { font-size: clamp(8px, 2vw, 15px); }
-  .ainow-manifesto { padding-inline: 18px; }
-  .ainow-cyan-logo { width: min(73.6vw, 448px); }
+  .project-two-bubble-copy.is-traditional > span,
+  .project-two-bubble-copy.is-personal > span,
+  .project-two-bubble-copy.is-professional > span {
+    white-space: nowrap;
+  }
+  .project-two-bubble-copy:not(.is-traditional):not(.is-personal):not(.is-professional) {
+    justify-content: flex-start;
+    text-align: left;
+  }
+  .project-two-identity-colon { display: none; }
+  .ainow-manifesto {
+    padding-top: clamp(50px, 6vw, 92px);
+    padding-inline: 18px;
+    padding-bottom: clamp(59px, 6.75vw, 104px);
+  }
+  .ainow-manifesto--version-a {
+    padding-top: clamp(60px, 7.2vw, 110.4px);
+  }
+  .ainow-cyan-logo {
+    width: min(73.6vw, 448px);
+    margin-bottom: clamp(15px, 2vw, 31px);
+  }
+  .ainow-manifesto-copy > p {
+    margin-top: clamp(27px, 3vw, 46px);
+  }
   .ainow-letters { width: min(73.6vw, 448px); height: 74px; font-size: 10px; }
   .ainow-letters span { grid-template-rows: 14px auto auto; row-gap: 8px; }
   .ainow-letters i { height: 14px; }
@@ -2842,6 +3044,10 @@ body.loading-active { overflow: hidden; }
 
 @media (max-width: 700px) {
   .scroll-sequence { height: 440vh; }
+  .scroll-sequence.cube-touch-active,
+  .scroll-sequence.cube-touch-active .pinned-frame {
+    touch-action: none;
+  }
   .scroll-cue { bottom: 1.4rem; font-size: 9px; }
 }
 
